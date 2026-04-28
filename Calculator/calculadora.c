@@ -1,3 +1,8 @@
+//Made a calculator using C, you can run it running the calculadora.exe 
+
+
+
+
 #include <stdio.h> 
 #include <windows.h>
 
