@@ -7,9 +7,9 @@ float valor[2];
 int opcao = -1;
 
 void valorEscolhido() {
-    printf("Digite o primeiro valor:\n");
+    printf("Digite o primeiro valor:");
     scanf("%f", &valor[0]);
-    printf("Digite o segundo valor:\n");
+    printf("Digite o segundo valor:");
     scanf("%f", &valor[1]);
 }
 
@@ -51,12 +51,14 @@ void main() {
         printf("0. Sair\n");
         printf("========================================\n");
 
-        printf("Escolha uma opção:\n");
+        printf("Escolha uma opção: ");
         scanf("%u", &opcao);
         
         if (opcao != 0){
             valorEscolhido();
+            printf("\n\n==========================\n\n");
             printf("Resultado: %.2f\n", calculadora(valor[0], valor[1], opcao));
+            printf("\n===========================\n\n");
         }
         else if (opcao == 0) {
             printf("Encerrando a calculadora.\n");
