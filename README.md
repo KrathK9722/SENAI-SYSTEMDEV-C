@@ -8,4 +8,8 @@ Created by: Arthur Henrique Kochan Initial date: 2026-04-27
 
 You can see and run every code [here](https://github.com/KrathK9722/SENAI-SYSTEMDEV-C/releases).
 
+Need to create release of: 
+- Salary_Calculator
+- Check_UserAge
+
 -----------------------------------------------------------------------------------------------------------------------------------
