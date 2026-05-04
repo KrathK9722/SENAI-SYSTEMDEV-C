@@ -1,4 +1,4 @@
-# SENAI COURSE - SYSTEMS DEVELOPEMENT using Python
+# SENAI COURSE - SYSTEMS DEVELOPEMENT using C
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
