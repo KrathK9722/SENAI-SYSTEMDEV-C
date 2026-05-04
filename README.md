@@ -11,6 +11,7 @@ You can see and run every code [here](https://github.com/KrathK9722/SENAI-SYSTEM
 Need to create release of: 
 - Activitie #4 (Average Grade)
 - Activitie #1 (Check Age)
-- ACtivitie #3 (Salary Calculator)
+- Activitie #3 (Salary Calculator)
+- Activitie #5 (Show Number)
 
 -----------------------------------------------------------------------------------------------------------------------------------
