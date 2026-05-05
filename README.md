@@ -14,5 +14,7 @@ Need to create release of:
 - Activitie #3 (Salary Calculator)
 - Activitie #5 (Show Number)
 - Activitie #6 (Product Discount)
+- Activitie #7 (Classification)
+- Activite #8 (Area Calculator)
 
 -----------------------------------------------------------------------------------------------------------------------------------
