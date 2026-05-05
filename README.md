@@ -13,5 +13,6 @@ Need to create release of:
 - Activitie #1 (Check Age)
 - Activitie #3 (Salary Calculator)
 - Activitie #5 (Show Number)
+- Activitie #6 (Product Discount)
 
 -----------------------------------------------------------------------------------------------------------------------------------
