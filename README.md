@@ -1,6 +1,6 @@
 # SENAI COURSE - SYSTEMS DEVELOPEMENT using C
 
------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
 A repository created to archive all projects and code developed using C during my technical course in systems development at SENAI.
 
@@ -15,6 +15,8 @@ Need to create release of:
 - Activitie #5 (Show Number)
 - Activitie #6 (Product Discount)
 - Activitie #7 (Classification)
-- Activite #8 (Area Calculator)
+- Activitie #8 (Area Calculator)
+- Activitie #9 (Using Vector)
+- Activitie #10 (Vector Grade Calculator)
 
------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
