@@ -3,7 +3,7 @@
 
 int main(void){
     SetConsoleOutputCP(65001);
-    int numero[8] = {15, 42, 8, 73, 29, 61, 4, 37},numeroDigitado,pos;
+    int numero[8] = {15, 42, 8, 73, 29, 61, 4, 37},numeroDigitado;
     
     //Procurar número digitado
     printf("Qual número quer procurar:");
