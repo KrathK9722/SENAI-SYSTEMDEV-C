@@ -18,5 +18,7 @@ Need to create release of:
 - Activitie #8 (Area Calculator)
 - Activitie #9 (Using Vector)
 - Activitie #10 (Vector Grade Calculator)
-
+- Activitie #11 (Higher and Lower number)
+- Activitie #12 (Null Positive Negative)
+- Activitie #13 (Show Vector Normal&Inverse)
 ---------------------------------------------------------------------------------------
