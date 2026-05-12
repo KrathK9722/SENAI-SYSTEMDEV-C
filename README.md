@@ -21,4 +21,7 @@ Need to create release of:
 - Activitie #11 (Higher and Lower number)
 - Activitie #12 (Null Positive Negative)
 - Activitie #13 (Show Vector Normal&Inverse)
+- Activitie #14 (Find Number in Vector)
+- Activitie #15 (Students List)
+- Activitie #16 (Double Vector)
 ---------------------------------------------------------------------------------------
