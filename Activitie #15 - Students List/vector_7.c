@@ -22,7 +22,7 @@ int main(void){
     
     //Ler alunos e notas
     for(i=0;i<5;i++){
-        printf("Escreva o nome do %dº aluno:",i);
+        printf("Escreva o nome do %dº aluno:",i+1);
         scanf("%s",aluno[i]);
     }
     for(i=0;i<5;i++){
