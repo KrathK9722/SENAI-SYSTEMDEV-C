@@ -19,6 +19,29 @@ Funções a implementar:
 
 Start code link: https://www.programiz.com/online-compiler/3X1OJ4IKdQtq1
 
+VALIDAÇÕES OBRIGATÓRIAS
+O sistema deverá validar:
+nome vazio
+preço negativo
+estoque negativo
+limite máximo de produtos
+opções inválidas do menu
+
+DESAFIOS EXTRAS (OPCIONAL)
+
+Permitir alterar:
+preço
+estoque
+Permitir remover produtos
+Mostrar:
+produto com menor preço
+Calcular:
+média de preços dos produtos
+Mostrar:
+produtos com estoque baixo
+Exemplo:
+estoque menor que 5
+
 */
 
 
@@ -60,6 +83,26 @@ float lerPreco()
     } while (preco < 0);
 
     return preco;
+}
+
+
+// ====================================
+// Função limpa o char e valida entrada
+// ====================================
+void limparTexto()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+// ============================
+// Clicar enter para continuar
+// ============================
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    limparTexto();
+    getchar();
 }
 
 // =============================
@@ -266,7 +309,7 @@ void produtoMaisCaro(Produto cadastro[], int total){
 
     if (empatado > 1)
     {
-        printf("\nobs: %d produtos tem o mesmo valor e são os mais caros do estoque:",empatado);
+        printf("\nMensagem do sistema: %d produtos tem o mesmo valor e são os mais caros do estoque:",empatado);
 
         for (int i=0;i<empatado;i++)
         {
@@ -286,6 +329,177 @@ void produtoMaisCaro(Produto cadastro[], int total){
 }
 
 // ==========================
+// FUNÇÃO PRODUTO MAIS BARATO
+// ==========================
+void produtoMaisBarato(Produto cadastro[], int total)
+{
+    float menor = cadastro[0].preco;
+    int posProduto = 0;
+    int empatado = 0;
+    int produtosEmpatados[MAX];
+
+    printf("\n\n=========== Produto mais barato ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n=========================================");
+        return;
+    }
+
+    //Achar o menor valor
+    for (int i=0;i<total;i++)
+    {              
+        if (cadastro[i].preco < menor)
+        {
+            menor = cadastro[i].preco;
+            posProduto = i;
+        }
+    }
+
+    //Ver quantos produtos tem o menor valor
+    for (int i=0;i<total;i++)
+    {
+        if (cadastro[i].preco == menor)
+        {
+            produtosEmpatados[empatado] = i;
+            empatado++;
+        }
+    }
+
+    if (empatado > 1)
+    {
+        printf("\nMensagem do sistema: %d produtos tem o mesmo valor e são os mais baratos do estoque:",empatado);
+
+        for (int i=0;i<empatado;i++)
+        {
+            printf("\n\nNOME DO PRODUTO: %s",cadastro[produtosEmpatados[i]].nome);
+            printf("\nPreço: R$%.2f",cadastro[produtosEmpatados[i]].preco);
+            printf("\nQuantidade: %d",cadastro[produtosEmpatados[i]].estoque);
+        }
+     }
+
+     else {
+        printf("\nNOME DO PRODUTO: %s",cadastro[posProduto].nome);
+        printf("\nPreço: R$%.2f",cadastro[posProduto].preco);
+        printf("\nQuantidade: %d",cadastro[posProduto].estoque);
+     }
+
+     printf("\n=========================================");
+}
+
+// ==========================
+// FUNÇÃO MÉDIA DE PREÇOS
+// ==========================
+void mediaPrecos(Produto cadastro[], int total)
+{
+    float soma = 0;
+    float media;
+
+    printf("\n\n=========== Média de preços ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n=========================================");
+        return;
+    }
+
+    for (int i = 0; i < total; i++)
+    {
+        soma += cadastro[i].preco;
+    }
+
+    media = soma / total;
+
+    printf("\nMédia de preços: R$%.2f", media);
+    printf("\n=========================================");
+}
+
+// ==========================
+// FUNÇÃO PRODUTOS COM ESTOQUE BAIXO
+// ==========================
+void produtosEstoqueBaixo(Produto cadastro[], int total)
+{
+    int limiteEstoque = 5; // Exemplo: produtos com estoque menor que 5
+    int encontrados = 0;
+
+    printf("\n\n=========== Produtos com estoque baixo ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n=========================================");
+        return;
+    }
+
+    for (int i = 0; i < total; i++)
+    {
+        if (cadastro[i].estoque < limiteEstoque)
+        {
+            if (encontrados == 0)
+            {
+                printf("\nOs seguintes produtos têm estoque baixo:");
+            }
+            printf("\n\nNOME DO PRODUTO: %s", cadastro[i].nome);
+            printf("\nPreço: R$%.2f", cadastro[i].preco);
+            printf("\nQuantidade: %d", cadastro[i].estoque);
+            encontrados++;
+        }
+    }
+
+    if (encontrados == 0)
+    {
+        printf("\nNenhum produto com estoque baixo encontrado.");
+    }
+
+    printf("\n=========================================");
+}
+
+// ===============================
+// FUNÇÃO ALTERAR DADOS DO PRODUTO
+// ===============================
+void alterarDadosProduto(Produto cadastro[], int total)
+{
+    int posicao;
+
+    printf("\n\n=========== Alterar dados do produto ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n=========================================");
+        return;
+    }
+
+    posicao = buscar(cadastro, total);
+
+    if ((posicao >= 0) && (posicao < total))
+    {
+        printf("\nProduto encontrado:");
+        printf("\n\nNOME DO PRODUTO: %s", cadastro[posicao].nome);
+        printf("\nPreço: R$%.2f", cadastro[posicao].preco);
+        printf("\nQuantidade: %d", cadastro[posicao].estoque);
+
+        // Solicitar novos dados
+        printf("\n\nDigite os novos dados do produto:");
+        printf("\nNome: ");
+        limparTexto();
+        scanf("%[^\n]", cadastro[posicao].nome);
+        printf("Preço: ");
+        scanf("%f", &cadastro[posicao].preco);
+        printf("Quantidade: ");
+        scanf("%d", &cadastro[posicao].estoque);
+    }
+    else
+    {
+        printf("\n=====================================");
+    }
+
+    printf("\n=========================================");
+}
+
+// ==========================
 // MENU
 // ==========================
 void mostrarMenu()
@@ -298,6 +512,10 @@ void mostrarMenu()
     printf("3 - Buscar produto\n");
     printf("4 - Produto mais caro\n");
     printf("5 - Valor total em estoque\n");
+    printf("6 - Produto mais barato\n");
+    printf("7 - Média de preços\n");
+    printf("8 - Produtos com estoque baixo\n");
+    printf("9 - Alterar dados do produto\n");
     printf("0 - Sair\n");
 }
 
@@ -307,19 +525,6 @@ int lerOpcao()
     printf("Opcao: ");
     scanf("%d", &opcao);
     return opcao;
-}
-
-void limparTexto()
-{
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void esperarEnter()
-{
-    printf("\nPressione ENTER para continuar...");
-    limparTexto();
-    getchar();
 }
 
 // ========================== 
@@ -393,7 +598,22 @@ int main()
             valorTotal(cadastro,total);
             esperarEnter();
             break;
-
+        case 6:
+            produtoMaisBarato(cadastro,total);
+            esperarEnter();
+            break;
+        case 7:
+            mediaPrecos(cadastro,total);
+            esperarEnter();
+            break;
+        case 8:
+            produtosEstoqueBaixo(cadastro,total);
+            esperarEnter();
+            break;
+        case 9:
+            alterarDadosProduto(cadastro,total);
+            esperarEnter();
+            break;
         case 0:
             printf("\nPrograma encerrado.\n");
             break;
