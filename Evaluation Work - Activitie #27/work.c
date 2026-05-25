@@ -29,6 +29,17 @@ Start code link: https://www.programiz.com/online-compiler/3X1OJ4IKdQtq1
 
 #define MAX 10
 
+//Variáveis Globais
+
+//Estruturas
+typedef struct {
+    char nome[50]; 
+    float preco;
+    int estoque;
+}Produto;
+
+
+
 // ==========================
 // FUNÇÃO PARA VALIDAR PREÇO
 // ==========================
@@ -50,6 +61,7 @@ float lerPreco()
 
     return preco;
 }
+
 // =============================
 // FUNÇÃO PARA VALIDAR ESTOQUE
 // =============================
@@ -71,10 +83,11 @@ int lerEstoque()
 
     return estoque;
 }
+
 // ==========================
 // FUNÇÃO PARA CADASTRAR
 // ==========================
-int cadastrarProduto(char nomes[][50],float precos[],int estoques[],int total)
+int cadastrarProduto(Produto cadastro[],int total)
 {
     int i = total;
 
@@ -93,22 +106,22 @@ int cadastrarProduto(char nomes[][50],float precos[],int estoques[],int total)
     do
     {
         printf("Nome do produto: ");
-        fgets(nomes[i], 50, stdin);
+        fgets(cadastro[i].nome, 50, stdin);
 
-        nomes[i][strcspn(nomes[i], "\n")] = '\0';
+        cadastro[i].nome[strcspn(cadastro[i].nome, "\n")] = '\0';
 
-        if (strlen(nomes[i]) == 0)
+        if (strlen(cadastro[i].nome) == 0)
         {
             printf("Nome nao pode ser vazio!\n");
         }
 
-    } while (strlen(nomes[i]) == 0);
+    } while (strlen(cadastro[i].nome) == 0);
 
     // Cadastro do preço
-    precos[i] = lerPreco();
+    cadastro[i].preco = lerPreco();
 
     // Cadastro do estoque
-    estoques[i] = lerEstoque();
+    cadastro[i].estoque = lerEstoque();
 
     // Incrementa quantidade de produtos
     total++;
@@ -118,26 +131,50 @@ int cadastrarProduto(char nomes[][50],float precos[],int estoques[],int total)
 
     return total;
 }
+
 // ===========================
 // FUNÇÃO PARA LISTAR PRODUTOS
 // ===========================
-void lista(char *nome, float preco, int quantidade)
+void lista(Produto cadastro[], int total)
 {
-    printf("\nProduto: %s  Preço do produto: R$%.2f  Quantidade em Estoque: %d",nome,preco,quantidade);
-    
+    printf("\n\n=========== LISTA DE PRODUTOS ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n========================================"); 
+        return;
+    }
+
+    for (int i=0;i<total;i++)
+    {
+        printf("\nProduto: %s  Preço do produto: R$%.2f  Quantidade em Estoque: %d",cadastro[i].nome,cadastro[i].preco,cadastro[i].estoque);
+    }
+
+    printf("\n========================================"); 
 }
+
 // ===========================
 // FUNÇÃO PARA BUSCAR PRODUTO
 // ===========================
-int buscar(char nomes[][50])
+int buscar(Produto cadastro[], int total)
 {
     char nome[50] = "vazio";
+
     printf("\n\n========== BUSCA DE PRODUTOS ========\n");
-    //Nome do produto
+
+    if (total == 0)
+    {
+        printf("Nenhum produto cadastrado.");
+        return -1;
+    }
+
+    getchar();
+
+    //Salvar nome para buscar
     do
     { 
         printf("Qual produto quer buscar? ");
-        getchar();
         fgets(nome, 50, stdin);
 
         nome[strcspn(nome, "\n")] = '\0';
@@ -148,28 +185,106 @@ int buscar(char nomes[][50])
         }
 
     } while (strlen(nome) == 0);
+
     //Buscar produto
-    for (int i=0;i<MAX;i++){
-        if (strcmp(nomes[i], nome) == 0){
+    for (int i=0;i<total;i++)
+    {
+        if (strcmp(cadastro[i].nome, nome) == 0)
+        {
             return i;
         }
     }
+
     printf("Produto não encontrado!");
+
     return -1;
 }
+
 // ==========================
 // FUNÇÃO VALOR TOTAL
 // ==========================
-void valorTotal(float precos[],int estoques[])
+void valorTotal(Produto cadastro[], int totalProdutos)
 {
     float total = 0;
-    for (int i=0;i<MAX;i++){
-        total = total + (precos[i] * estoques[i]);
+
+    if (totalProdutos == 0)
+    {
+        printf("\n\n=============================================\n");
+        printf("Nenhum produto cadastrado.");
+        printf("\n=============================================");
+        return;
     }
+
+    for (int i=0;i<totalProdutos;i++)
+    {
+        total = total + (cadastro[i].preco * cadastro[i].estoque);
+    }
+
     printf("\n\n=============================================\n");
     printf("O valor total em estoque é R$%.2f.",total);
     printf("\n=============================================");
 }
+
+// ==========================
+// FUNÇÃO PRODUTO MAIS CARO
+// ==========================
+void produtoMaisCaro(Produto cadastro[], int total){
+
+    float maior=0;
+    int posProduto = 0;
+    int empatado = 0;
+    int produtosEmpatados[MAX];
+
+    printf("\n\n=========== Produto mais caro ==========");
+
+    if (total == 0)
+    {
+        printf("\nNenhum produto cadastrado.");
+        printf("\n=========================================");
+        return;
+    }
+
+    //Achar o maior valor
+    for (int i=0;i<total;i++)
+    {              
+        if (cadastro[i].preco > maior)
+        {
+            maior = cadastro[i].preco;
+            posProduto = i;
+        }
+    }
+
+    //Ver quantos produtos tem o maior valor
+    for (int i=0;i<total;i++)
+    {
+        if (cadastro[i].preco == maior)
+        {
+            produtosEmpatados[empatado] = i;
+            empatado++;
+        }
+    }
+
+    if (empatado > 1)
+    {
+        printf("\nobs: %d produtos tem o mesmo valor e são os mais caros do estoque:",empatado);
+
+        for (int i=0;i<empatado;i++)
+        {
+            printf("\n\nNOME DO PRODUTO: %s",cadastro[produtosEmpatados[i]].nome);
+            printf("\nPreço: R$%.2f",cadastro[produtosEmpatados[i]].preco);
+            printf("\nQuantidade: %d",cadastro[produtosEmpatados[i]].estoque);
+        }
+     }
+
+     else {
+        printf("\nNOME DO PRODUTO: %s",cadastro[posProduto].nome);
+        printf("\nPreço: R$%.2f",cadastro[posProduto].preco);
+        printf("\nQuantidade: %d",cadastro[posProduto].estoque);
+     }
+
+     printf("\n=========================================");
+}
+
 // ==========================
 // MENU
 // ==========================
@@ -186,27 +301,31 @@ void menu()
     printf("0 - Sair\n");
     printf("Opcao: ");
 }
-// ==========================
+
+// ========================== 
 // FUNÇÃO PRINCIPAL
 // ==========================
 int main()
 {
     SetConsoleOutputCP(65001);
-    char nomes[MAX][50] = {"Sem cadastro", "Sem cadastro","Sem cadastro","Sem cadastro",
-                            "Sem cadastro","Sem cadastro","Sem cadastro","Sem cadastro",
-                            "Sem cadastro","Sem cadastro"};
-    float precos[MAX];
-    int estoques[MAX];
 
+    //Setando Cadastro
+    Produto cadastro[MAX];
+
+    //Inicializando os cadastros
+    for(int i = 0; i < MAX; i++)
+    {
+        strcpy(cadastro[i].nome, "Sem cadastro");
+        cadastro[i].preco = 0;
+        cadastro[i].estoque = 0;
+    }
+    
+    //Variáveis
     int total = 0;
     int opcao;
     
-    //Inicializando Variáveis
-    for (int i=0;i<MAX;i++){
-        precos[i] = 0;
-        estoques[i] = 0;
-    }
 
+    //Loop do Menu
     do
     {
         menu();
@@ -215,39 +334,39 @@ int main()
 
         switch (opcao)
         {
+
         case 1:
-            total = cadastrarProduto(
-                nomes,
-                precos,
-                estoques,
-                total);
+            system("cls");
+            total = cadastrarProduto(cadastro,total);
             break;
 
         case 2:
-            printf("\n\n=========== LISTA DE PRODUTOS ==========");
-            for (int i=0;i<MAX;i++){
-                lista(nomes[i],precos[i],estoques[i]);
-            }
-            printf("\n========================================");
+            system("cls");
+            lista(cadastro,total);
             break;
 
         case 3:
-            int posProduto = buscar(nomes);
-            if((posProduto >= 0) & (posProduto <= MAX) ){
-                printf("\nProduto: %s",nomes[posProduto]);
-                printf("\nPreço: R$%.2f",precos[posProduto]);
-                printf("\nQuantidade: %d",estoques[posProduto]);
-                printf("\n=====================================");
+            system("cls");
+            int posProduto = buscar(cadastro,total);
+
+            if((posProduto >= 0) && (posProduto < total) )
+            {
+                printf("\nProduto: %s",cadastro[posProduto].nome);
+                printf("\nPreço: R$%.2f",cadastro[posProduto].preco);
+                printf("\nQuantidade: %d",cadastro[posProduto].estoque);
             }
+
             printf("\n=====================================");
             break;
 
         case 4:
-            // IMPLEMENTAR
+            system("cls");
+            produtoMaisCaro(cadastro,total);
             break;
 
         case 5:
-            valorTotal(precos,estoques);
+            system("cls");
+            valorTotal(cadastro,total);
             break;
 
         case 0:
