@@ -288,7 +288,7 @@ void produtoMaisCaro(Produto cadastro[], int total){
 // ==========================
 // MENU
 // ==========================
-void menu()
+void mostrarMenu()
 {
     printf("\n\n=============================\n");
     printf(" SISTEMA DE PRODUTOS\n");
@@ -299,7 +299,27 @@ void menu()
     printf("4 - Produto mais caro\n");
     printf("5 - Valor total em estoque\n");
     printf("0 - Sair\n");
+}
+
+int lerOpcao()
+{
+    int opcao;
     printf("Opcao: ");
+    scanf("%d", &opcao);
+    return opcao;
+}
+
+void limparTexto()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    limparTexto();
+    getchar();
 }
 
 // ========================== 
@@ -328,25 +348,25 @@ int main()
     //Loop do Menu
     do
     {
-        menu();
-
-        scanf("%d", &opcao);
+        system("cls");
+        mostrarMenu();
+        opcao = lerOpcao();
 
         switch (opcao)
         {
 
         case 1:
-            system("cls");
             total = cadastrarProduto(cadastro,total);
+            esperarEnter();
             break;
 
         case 2:
-            system("cls");
             lista(cadastro,total);
+            esperarEnter();
             break;
 
         case 3:
-            system("cls");
+        {
             int posProduto = buscar(cadastro,total);
 
             if((posProduto >= 0) && (posProduto < total) )
@@ -355,18 +375,23 @@ int main()
                 printf("\nPreço: R$%.2f",cadastro[posProduto].preco);
                 printf("\nQuantidade: %d",cadastro[posProduto].estoque);
             }
+            else
+            {
+                printf("\n=====================================");
+            }
 
-            printf("\n=====================================");
+            esperarEnter();
             break;
+        }
 
         case 4:
-            system("cls");
             produtoMaisCaro(cadastro,total);
+            esperarEnter();
             break;
 
         case 5:
-            system("cls");
             valorTotal(cadastro,total);
+            esperarEnter();
             break;
 
         case 0:
