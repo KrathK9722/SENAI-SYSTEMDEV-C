@@ -7,6 +7,31 @@ O simbolo "->" aponta para a variável dentro da struct
 Objeto *pos serve para percorrer as outras structs sem alterar elas e pegar a posição do armazenamento
 Objeto *inicio é a posição da primeira tarefa da lista
 Objeto *ultima é a posição da ultima tarefa na lista
+
+IMPLEMENTAR AGORA:
+
+Cadastro de pessoas 
+- Email - validar: deve conter @ e .com ou .br
+- Nivel: deve conter junior, pleno ou senior
+- Nome: Validar se permite
+- Id: sequêncial e único
+
+No cadastro da tarefa:
+Dificuldade: 1,2,3
+Responsavel: Pessoa
+
+Relcionar tarefa com pessoas ex:
+Senior: Até nivel 3
+Pleno: Até nivel 2
+Junior: Até nivel 1
+
+
+Adicionar as novas variaveis da tarefa
+Criar struct pessoa e permitir criação do cadastro
+Permitir alterar responsavel da tarefa
+Novo menu de gerenciamento da tarefa
+Menu de gerenciamento dos cadastros
+Menu de login do cadastro
 */
 
 #include <stdio.h>
@@ -15,29 +40,34 @@ Objeto *ultima é a posição da ultima tarefa na lista
 #include <stdlib.h>
 
 // Structs
-typedef struct Objeto{
+typedef struct Tarefa{
     int id;
     char titulo[100];
     char descricao[400];
     int prioridade;
     int status;
-    struct Objeto *proxima;
-}Objeto;
+    struct Tarefa *proxima;
+}Tarefa;
+
 
 // Protótipo de funções
 
-Objeto* cadastrarTarefas(Objeto **inicio, Objeto *ultima, int *idTotal);
-Objeto* buscarTarefa(Objeto *inicio, char *tituloDigitado);
-Objeto* removerTarefa(Objeto **inicio, Objeto *ultima);
-Objeto*  digitarTitulo(Objeto *inicio);
-void tarefasPendentes(Objeto *inicio);
+Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal);
+Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
+Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
+Tarefa*  digitarTitulo(Tarefa *inicio);
+void tarefasPendentes(Tarefa *inicio);
 void mostrarMenu();
 void esperarEnter();
-void mostrarTarefa(Objeto *tarefa);
-void alterarStatus(Objeto *inicio);
-void listarTarefa(Objeto *inicio);
-void tarefasConcluidas(Objeto *inicio);
-void tarefasPrioridade(Objeto *inicio);
+void mostrarTarefa(Tarefa *tarefa);
+void alterarStatus(Tarefa *inicio);
+void listarTarefa(Tarefa *inicio);
+void tarefasConcluidas(Tarefa *inicio);
+void tarefasPrioridade(Tarefa *inicio);
+void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID);
+void opcaoUsuarios(int opcao);
+void menuTarefas();
+void menuUsuario();
 int lerOpcao();
 
 
@@ -48,15 +78,15 @@ int main(){
     SetConsoleOutputCP(65001);
 
     //  Inicialização da struct
-    Objeto *inicio = NULL;
-    Objeto *ultima = NULL;
+    Tarefa *inicio = NULL;
+    Tarefa *ultima = NULL;
 
     //  Variáveis
     int opcao;
     int listaID=1;
 
 
-//  Loop do Menu
+//  Loop do Menu gerenciar tarefas
     do
     {
         system("cls");
@@ -66,43 +96,14 @@ int main(){
         switch (opcao)
         {
 
-        case 1:
-            ultima = cadastrarTarefas(&inicio, ultima,&listaID);
-            esperarEnter();
+        case 1: // Gerenciar usuários
+            opcaoUsuarios(opcao);
             break;
 
-        case 2:
-            listarTarefa(inicio);
-            esperarEnter();
+        case 2: // Gerenciar tarefas
+            opcaoTarefas(opcao, &inicio, &ultima, &listaID);;
             break;
 
-        case 3:
-        {   
-            digitarTitulo(inicio);
-            esperarEnter();
-            break;
-        }
-        case 4:
-            alterarStatus(inicio);
-            esperarEnter();
-            break;
-        case 5:
-            tarefasPendentes(inicio);
-            esperarEnter();
-            break;
-        case 6:
-            tarefasConcluidas(inicio);
-            esperarEnter();
-            break;
-        case 7:
-            tarefasPrioridade(inicio);
-            esperarEnter();
-            break;
-        case 8:
-            ultima = removerTarefa(&inicio, ultima);
-            printf("\n =============================================");
-            esperarEnter();
-            break;
         case 0:
             printf("\nPrograma encerrado.\n");
             break;
@@ -115,6 +116,104 @@ int main(){
 
     return 0;
 }    
+
+// ===============
+//  OPÇÃO TAREFAS
+// ===============
+void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID){
+    //  Loop do Menu gerenciar tarefas
+    do
+    {
+        system("cls");
+        menuTarefas();
+        opcao = lerOpcao();
+
+        switch (opcao)
+        {
+
+        case 1:
+            *ultima = cadastrarTarefas(inicio, *ultima, listaID);;
+            esperarEnter();
+            break;
+
+        case 2:
+            listarTarefa(*inicio);
+            esperarEnter();
+            break;
+
+        case 3:
+        {   
+            digitarTitulo(*inicio);
+            esperarEnter();
+            break;
+        }
+        case 4:
+            alterarStatus(*inicio);
+            esperarEnter();
+            break;
+        case 5:
+            tarefasPendentes(*inicio);
+            esperarEnter();
+            break;
+        case 6:
+            tarefasConcluidas(*inicio);
+            esperarEnter();
+            break;
+        case 7:
+            tarefasPrioridade(*inicio);
+            esperarEnter();
+            break;
+        case 8:
+            *ultima = removerTarefa(inicio, *ultima);
+            printf("\n =============================================");
+            esperarEnter();
+            break;
+        case 0:
+            printf("\nSaindo do menu...\n");
+            break;
+
+        default:
+            printf("\nOpção inválida!\n");
+        }
+
+    } while (opcao != 0);
+}    
+
+// ================
+//  OPÇÃO USUÁRIOS
+// ================
+void opcaoUsuarios(int opcao){
+    //  Loop do Menu gerenciar tarefas
+    do
+    {
+        system("cls");
+        menuUsuario();
+        opcao = lerOpcao();
+
+        switch (opcao)
+        {
+
+        case 1:
+            esperarEnter();
+            break;
+
+        case 2:
+            esperarEnter();
+            break;
+
+        case 3:
+            esperarEnter();
+            break;
+        case 0:
+            printf("\nSaindo do menu...\n");
+            break;
+
+        default:
+            printf("\nOpção inválida!\n");
+        }
+
+    } while (opcao != 0);
+}   
 
 // ==================
 //  FUNÇÃO LER OPÇÃO
@@ -146,10 +245,10 @@ void esperarEnter()
     getchar();
 }
 
-// =================
-//  FUNÇÃO VER MENU
-// =================
-void mostrarMenu()
+// =============================
+//  FUNÇÃO VER MENU DAS TAREFAS
+// =============================
+void menuTarefas()
 {
     printf("\n\n=====================================\n");
     printf(" SISTEMA DE GERENCIAMENTO DE TAREFAS\n");
@@ -162,14 +261,43 @@ void mostrarMenu()
     printf("6 - Ver tarefas concluidas\n");
     printf("7 - Ver tarefas de maior prioridade\n");
     printf("8 - Remover tarefa\n");
-    printf("0 - Sair\n");
+    printf("9 - Definir responsável\n");
+    printf("10 - Alterar dificuldade\n");
+    printf("0 - Sair do menu\n");
+}
+
+// =================
+//  FUNÇÃO VER MENU 
+// =================
+void mostrarMenu()
+{
+    printf("\n\n==========================\n");
+    printf(" SISTEMA DE GERENCIAMENTO \n");
+    printf("==========================\n");
+    printf("1 - Gerenciar usuários\n");
+    printf("2 - Gerenciar tarefas\n");
+    printf("0 - Sair do sistema\n");
+}
+
+// =============================
+//  FUNÇÃO VER MENU DAS TAREFAS
+// =============================
+void menuUsuario()
+{
+    printf("\n\n=====================================\n");
+    printf(" SISTEMA DE GERENCIAMENTO DE USUÁRIOS\n");
+    printf("=====================================\n");
+    printf("1 - Criar usuário\n");
+    printf("2 - Listar usuários\n");
+    printf("3 - Remover usuário\n");
+    printf("0 - Sair do menu\n");
 }
 
 // =====================
 //  FUNÇÃO CRIAR TAREFA
 // =====================
-Objeto* cadastrarTarefas(Objeto **inicio, Objeto *ultima,int *idTotal){
-    Objeto *novaTarefa = (Objeto *)malloc(sizeof(Objeto)); 
+Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
+    Tarefa *novaTarefa = (Tarefa *)malloc(sizeof(Tarefa)); 
     if(novaTarefa == NULL){
         printf("\nErro ao alocar memória.");
         return ultima;
@@ -254,8 +382,8 @@ Objeto* cadastrarTarefas(Objeto **inicio, Objeto *ultima,int *idTotal){
 // ===============
 //  FUNÇÃO BUSCAR 
 // ===============
-Objeto* buscarTarefa(Objeto *inicio, char *tituloDigitado){
-    Objeto *pos = inicio;
+Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado){
+    Tarefa *pos = inicio;
     
     while (pos != NULL){
         if (strcmp(pos->titulo, tituloDigitado) == 0){
@@ -269,7 +397,7 @@ Objeto* buscarTarefa(Objeto *inicio, char *tituloDigitado){
 // =======================
 //  FUNÇÃO PRINTAR TAREFA
 // =======================
-void mostrarTarefa(Objeto *tarefa){
+void mostrarTarefa(Tarefa *tarefa){
     printf("\n========== TAREFA (ID %d) =========",tarefa->id);
     printf("\nTítulo:%s",tarefa->titulo);
     printf("\nDescrição:%s",tarefa->descricao);
@@ -295,11 +423,11 @@ void mostrarTarefa(Objeto *tarefa){
 // =======================
 //  FUNÇÃO ALTERAR STATUS
 // =======================
-void alterarStatus(Objeto *inicio){
+void alterarStatus(Tarefa *inicio){
 
     printf("\n=========== Alterar Status ============");
 
-    Objeto *tarefaAlvo = digitarTitulo(inicio);
+    Tarefa *tarefaAlvo = digitarTitulo(inicio);
     int confirmar;
     
     if(tarefaAlvo != NULL)
@@ -333,7 +461,7 @@ void alterarStatus(Objeto *inicio){
 // ===============================================
 //  FUNÇÃO DIGITAR TITULO (COMPLEMENTO DO BUSCAR)
 // ===============================================
-Objeto* digitarTitulo(Objeto *inicio){
+Tarefa* digitarTitulo(Tarefa *inicio){
     char nome[100] = "vazio";
             limparTexto();
 
@@ -353,7 +481,7 @@ Objeto* digitarTitulo(Objeto *inicio){
             } while (strlen(nome) == 0);
             
             //Buscar titulo
-            Objeto *tarefaAlvo = buscarTarefa(inicio, nome);
+            Tarefa *tarefaAlvo = buscarTarefa(inicio, nome);
 
             if(tarefaAlvo != NULL)
             {   
@@ -371,7 +499,7 @@ Objeto* digitarTitulo(Objeto *inicio){
 // =======================
 //  FUNÇÃO REMOVER TAREFA
 // =======================
-Objeto* removerTarefa(Objeto **inicio, Objeto *ultima){
+Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
     printf("\n ============== REMOVER TAREFA ===============");
     char nome[100];
 
@@ -393,8 +521,8 @@ Objeto* removerTarefa(Objeto **inicio, Objeto *ultima){
 
 
 
-    Objeto *atual = *inicio;
-    Objeto *anterior = NULL;
+    Tarefa *atual = *inicio;
+    Tarefa *anterior = NULL;
 
     while(atual != NULL){
 
@@ -439,8 +567,8 @@ Objeto* removerTarefa(Objeto **inicio, Objeto *ultima){
 // ================
 //  LISTAR TAREFAS
 // ================
-void listarTarefa(Objeto *inicio){
-    Objeto *pos = inicio;
+void listarTarefa(Tarefa *inicio){
+    Tarefa *pos = inicio;
 
     printf("\n========== LISTA DE TAREFAS =========");
 
@@ -454,8 +582,8 @@ void listarTarefa(Objeto *inicio){
 // =============================
 //  MOSTRAR  TAREFAS CONCLUIDAS
 // =============================
-void tarefasConcluidas(Objeto *inicio){
-    Objeto *pos = inicio;
+void tarefasConcluidas(Tarefa *inicio){
+    Tarefa *pos = inicio;
 
     printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
 
@@ -471,8 +599,8 @@ void tarefasConcluidas(Objeto *inicio){
 // ============================
 //  MOSTRAR  TAREFAS PENDENTES
 // ============================
-void tarefasPendentes(Objeto *inicio){
-    Objeto *pos = inicio;
+void tarefasPendentes(Tarefa *inicio){
+    Tarefa *pos = inicio;
 
     printf("\n========== LISTA DE TAREFAS PENDENTES =========");
 
@@ -488,8 +616,8 @@ void tarefasPendentes(Objeto *inicio){
 // ======================================
 //  MOSTRAR  TAREFA PRIORIDADE MAIS ALTA
 // ======================================
-void tarefasPrioridade(Objeto *inicio){
-    Objeto *pos = inicio;
+void tarefasPrioridade(Tarefa *inicio){
+    Tarefa *pos = inicio;
     int maior=0;
 
     printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
