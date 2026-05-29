@@ -569,6 +569,11 @@ Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
 // ================
 void listarTarefa(Tarefa *inicio){
     Tarefa *pos = inicio;
+    
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa cadastrada.");
+        return;
+    }
 
     printf("\n========== LISTA DE TAREFAS =========");
 
