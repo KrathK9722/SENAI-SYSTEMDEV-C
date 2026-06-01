@@ -34,6 +34,7 @@ Menu de gerenciamento dos cadastros
 Menu de login do cadastro
 */
 
+//Bibliotecas
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
@@ -45,17 +46,28 @@ typedef struct Tarefa{
     char titulo[100];
     char descricao[400];
     int prioridade;
+    int dificuldade;
     int status;
+    char responsavel[100];
     struct Tarefa *proxima;
 }Tarefa;
 
+typedef struct Pessoa{
+    int id;
+    char nome[100];
+    char email[100];
+    char nivel[20];
+    struct Pessoa *proxima;
+}Pessoa;
 
-// Protótipo de funções
-
+// Protótipos das funções
 Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal);
 Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
-Tarefa*  digitarTitulo(Tarefa *inicio);
+Tarefa* digitarTitulo(Tarefa *inicio);
+Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal);
+Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima);
+void listarPessoa(Pessoa *inicio);
 void tarefasPendentes(Tarefa *inicio);
 void mostrarMenu();
 void esperarEnter();
@@ -65,7 +77,7 @@ void listarTarefa(Tarefa *inicio);
 void tarefasConcluidas(Tarefa *inicio);
 void tarefasPrioridade(Tarefa *inicio);
 void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID);
-void opcaoUsuarios(int opcao);
+void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID);
 void menuTarefas();
 void menuUsuario();
 int lerOpcao();
@@ -77,16 +89,19 @@ int lerOpcao();
 int main(){
     SetConsoleOutputCP(65001);
 
-    //  Inicialização da struct
+    // Inicialização da struct
     Tarefa *inicio = NULL;
     Tarefa *ultima = NULL;
+    Pessoa *inicioPessoa = NULL;
+    Pessoa *ultimaPessoa = NULL;
 
-    //  Variáveis
+    // Variáveis
     int opcao;
-    int listaID=1;
+    int listaIDtarefa=1;
+    int listaIDPessoa=1;
 
 
-//  Loop do Menu gerenciar tarefas
+    // Loop menu geral
     do
     {
         system("cls");
@@ -97,11 +112,11 @@ int main(){
         {
 
         case 1: // Gerenciar usuários
-            opcaoUsuarios(opcao);
+            opcaoUsuarios(opcao, &inicioPessoa, &ultimaPessoa, &listaIDPessoa);
             break;
 
         case 2: // Gerenciar tarefas
-            opcaoTarefas(opcao, &inicio, &ultima, &listaID);;
+            opcaoTarefas(opcao, &inicio, &ultima, &listaIDtarefa);
             break;
 
         case 0:
@@ -121,7 +136,7 @@ int main(){
 //  OPÇÃO TAREFAS
 // ===============
 void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID){
-    //  Loop do Menu gerenciar tarefas
+    // Loop do Menu gerenciar tarefas
     do
     {
         system("cls");
@@ -182,8 +197,8 @@ void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID){
 // ================
 //  OPÇÃO USUÁRIOS
 // ================
-void opcaoUsuarios(int opcao){
-    //  Loop do Menu gerenciar tarefas
+void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID){
+    // Loop do Menu gerenciar tarefas
     do
     {
         system("cls");
@@ -194,14 +209,18 @@ void opcaoUsuarios(int opcao){
         {
 
         case 1:
+            *ultima = cadastrarPessoa(inicio, *ultima, listaID);
             esperarEnter();
             break;
 
         case 2:
+            listarPessoa(*inicio);
             esperarEnter();
             break;
 
         case 3:
+            *ultima = removerPessoa(inicio, *ultima);
+            printf("\n =============================================");
             esperarEnter();
             break;
         case 0:
@@ -305,13 +324,13 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
 
     novaTarefa->proxima = NULL;
     
-    // ADIÇÃO SEQUÊNCIAL DO ID
+    // Adicionar ID em forma sequencial
     novaTarefa->id = (*idTotal)++;
     
 
     limparTexto();
     
-    // ADICIONAR TITULO
+    // Adicionar título
     do
     { 
         printf("\nDigite o titulo da tarefa (ID %d): ",novaTarefa->id);
@@ -326,7 +345,7 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
 
     } while (strlen(novaTarefa->titulo) == 0);
     
-    // ADICIONAR DESCRIÇÃO
+    // Adicionar descrição
     do
     { 
         printf("\nDigite a descrição da tarefa: ");
@@ -344,7 +363,7 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
 
 
 
-    //ADICIONAR PRIORIDADE
+    // Adicionar prioridade
     int numeroDigitado;
     int reset = 0;
 
@@ -361,11 +380,11 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
         }
     }while(reset == 0);
 
-    //STATUS PADRÃO
+    // Status pendente
     novaTarefa->status = 0;
 
 
-    // ADICIONAR TAREFA NA LISTA
+    // Adicionar tarefa na lista
     if (*inicio == NULL){
         *inicio = novaTarefa;
         ultima = novaTarefa;
@@ -465,7 +484,7 @@ Tarefa* digitarTitulo(Tarefa *inicio){
     char nome[100] = "vazio";
             limparTexto();
 
-            //Salvar titulo
+            // Salvar titulo
             do
             { 
                 printf("\nInforme o titulo da tarefa que procura: ");
@@ -475,12 +494,12 @@ Tarefa* digitarTitulo(Tarefa *inicio){
 
                 if (strlen(nome) == 0)
                 {
-                    printf("\nTitulo nao pode ser vazio!");
+                    printf("\nTitulo não pode ser vazio!");
                 }
 
             } while (strlen(nome) == 0);
             
-            //Buscar titulo
+            // Buscar titulo
             Tarefa *tarefaAlvo = buscarTarefa(inicio, nome);
 
             if(tarefaAlvo != NULL)
@@ -510,11 +529,11 @@ Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
         printf("\nDigite o titulo da tarefa que deseja remover: ");
         fgets(nome,100,stdin);
 
-         nome[strcspn(nome, "\n")] = '\0';
+         nome[strcspn(nome, "\n")] = '\0'; 
 
-        if (strlen(nome) == 0)
+        if (strlen(nome) == 0) // 
         {
-            printf("\nTitulo nao pode ser vazio!");
+            printf("\nTitulo não pode ser vazio!");
         }
 
     } while (strlen(nome) == 0);
@@ -589,6 +608,11 @@ void listarTarefa(Tarefa *inicio){
 // =============================
 void tarefasConcluidas(Tarefa *inicio){
     Tarefa *pos = inicio;
+    
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa concluída.");
+        return;
+    }
 
     printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
 
@@ -607,6 +631,11 @@ void tarefasConcluidas(Tarefa *inicio){
 void tarefasPendentes(Tarefa *inicio){
     Tarefa *pos = inicio;
 
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa pendente.");
+        return;
+    }
+
     printf("\n========== LISTA DE TAREFAS PENDENTES =========");
 
     while(pos != NULL){
@@ -624,6 +653,11 @@ void tarefasPendentes(Tarefa *inicio){
 void tarefasPrioridade(Tarefa *inicio){
     Tarefa *pos = inicio;
     int maior=0;
+
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa cadastrada.");
+        return;
+    }
 
     printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
     
@@ -645,3 +679,202 @@ void tarefasPrioridade(Tarefa *inicio){
     printf("\n=====================================");
 }
 
+// ==========================
+//  FUNÇÃO CADASTRAR USUÁRIO
+// ==========================
+Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
+    Pessoa *novaPessoa = (Pessoa *)malloc(sizeof(Pessoa)); 
+    if(novaPessoa == NULL){ // Verifica se deu pra alocar memoria
+        printf("\nErro ao alocar memória.");
+        return ultima;
+    }
+    
+    novaPessoa->proxima = NULL;
+    
+    // Adicionar ID em forma sequencial
+    novaPessoa->id = (*idTotal)++;
+    
+
+    limparTexto();
+    
+    // Adicionar nome
+    do
+    { 
+        printf("\nDigite o nome do usuário (ID %d): ",novaPessoa->id);
+        fgets(novaPessoa->nome,100,stdin);
+
+         novaPessoa->nome[strcspn(novaPessoa->nome, "\n")] = '\0';
+
+        if (strlen(novaPessoa->nome) == 0)
+        {
+            printf("\nNome não pode ser vazio!");
+        }
+
+    } while (strlen(novaPessoa->nome) == 0);
+    
+    // Adicionar email
+    do
+    { 
+        printf("\nDigite o email do usuário: ");
+        fgets(novaPessoa->email,100,stdin);
+
+         novaPessoa->email[strcspn(novaPessoa->email, "\n")] = '\0';
+
+        if (strlen(novaPessoa->email) == 0)
+        {
+            printf("\nEmail não pode ser vazio!");
+        }
+        else if(strchr(novaPessoa->email,'@') == NULL || (strstr(novaPessoa->email,".com") == NULL && strstr(novaPessoa->email,".br") == NULL))
+        {
+            printf("\nEmail deve conter '@' e '.com' ou '.br'!");
+            novaPessoa->email[0] = '\0';
+        }
+
+    } while (strlen(novaPessoa->email) == 0);
+
+    // Adicionar nivel
+    int reset = 0;
+
+    do
+    {
+        printf("\n(1) JUNIOR");
+        printf("\n(2) PLENO");
+        printf("\n(3) SENIOR");
+        printf("\nDigite o nível do usuário: ");
+        int numeroDigitado;
+        scanf("%d",&numeroDigitado);
+        
+        if(numeroDigitado == 1){
+            strcpy(novaPessoa->nivel,"JUNIOR");
+            reset = 1;
+        }
+        else if(numeroDigitado == 2){
+            strcpy(novaPessoa->nivel,"PLENO");
+            reset = 1;
+        }
+        else if(numeroDigitado == 3){
+            strcpy(novaPessoa->nivel,"SENIOR");
+            reset = 1;
+        }
+    }while(reset == 0);
+
+    // Adicionar usuário na lista
+    if (*inicio == NULL){
+        *inicio = novaPessoa;
+        ultima = novaPessoa;
+    }
+    else{
+        ultima->proxima=novaPessoa;
+        ultima=novaPessoa;
+    }
+    
+    return ultima;
+    printf("\nNível definido: %s",novaPessoa->nivel);
+    printf("\nUsuário criado com sucesso!");
+    esperarEnter();
+}
+
+// ========================
+//  FUNÇÃO REMOVER USUÁRIO
+// ========================
+Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
+    printf("\n ============== REMOVER USUÁRIO ===============");
+    char nome[100];
+
+    limparTexto();
+
+    do
+    { 
+        printf("\nDigite o nome do usuário que deseja remover: ");
+        fgets(nome,100,stdin);
+
+         nome[strcspn(nome, "\n")] = '\0';
+
+        if (strlen(nome) == 0)
+        {
+            printf("\nNome não pode ser vazio!");
+        }
+
+    } while (strlen(nome) == 0);
+
+
+
+    Pessoa *atual = *inicio;
+    Pessoa *anterior = NULL;
+
+    while(atual != NULL){
+
+        if(strcmp(atual->nome,nome) == 0){
+            mostrarUsuario(atual);
+
+            int confirmar;
+
+            printf("\n\nDeseja realmente remover?");
+            printf("\nDigite 0 (SIM) ou 1 (NÃO): ");
+            scanf("%d",&confirmar);
+
+            if(confirmar == 0){
+
+                if(anterior == NULL){
+                    *inicio = atual->proxima;
+                }
+                else{
+                    anterior->proxima = atual->proxima;
+                }
+
+                if(atual == ultima){
+                    ultima = anterior;
+                }
+
+                free(atual);
+
+                printf("\nUsuário removido com sucesso do sistema.");
+
+                return ultima;
+            }
+        }
+        anterior = atual;
+        atual = atual->proxima;
+    }
+    printf("\nUsuário não encontrado.");
+    return ultima;
+}
+
+// ========================
+//  FUNÇÃO LISTAR USUÁRIOS
+// ========================
+void listarPessoa(Pessoa *inicio){
+    Pessoa *pos = inicio;
+    
+    if(inicio == NULL){
+        printf("\nNenhum usuário cadastrado.");
+        return;
+    }
+
+    printf("\n========== LISTA DE USUÁRIOS =========");
+
+    while(pos != NULL){
+        mostrarUsuario(pos);
+        pos=pos->proxima;
+    }
+    printf("\n=====================================");
+}
+
+// =======================
+//  FUNÇÃO MOSTRAR USUÁRIO
+// =======================
+void mostrarUsuario(Pessoa *usuario){
+    printf("\n========== USUÁRIO (ID %d) =========",usuario->id);
+    printf("\nNome:%s",usuario->nome);
+    printf("\nEmail:%s",usuario->email);
+    if (usuario->nivel == 1){
+        printf("\nCargo: JUNIOR(1)");
+    }
+    else if (usuario->nivel == 2){
+        printf("\nCargo: PLENO(2)");
+    }
+    else if (usuario->nivel == 3){
+        printf("\nCargo: SENIOR(3)");
+    }
+    printf("\n===================================");
+}
