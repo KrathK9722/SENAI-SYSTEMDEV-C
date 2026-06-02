@@ -41,6 +41,14 @@ Menu de login do cadastro
 #include <stdlib.h>
 
 // Structs
+typedef struct Pessoa{
+    int id;
+    char nome[100];
+    char email[100];
+    int nivel;
+    struct Pessoa *proxima;
+}Pessoa;
+
 typedef struct Tarefa{
     int id;
     char titulo[100];
@@ -48,25 +56,20 @@ typedef struct Tarefa{
     int prioridade;
     int dificuldade;
     int status;
-    char responsavel[100];
+    struct Pessoa *responsavel;
     struct Tarefa *proxima;
 }Tarefa;
 
-typedef struct Pessoa{
-    int id;
-    char nome[100];
-    char email[100];
-    char nivel[20];
-    struct Pessoa *proxima;
-}Pessoa;
-
 // Protótipos das funções
-Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal);
+Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal, Pessoa **inicioUsuario);
 Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
 Tarefa* digitarTitulo(Tarefa *inicio);
 Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal);
 Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima);
+Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade);
+Pessoa* mostrarUsuario(Pessoa *usuario);
+Pessoa* buscarIdUser(Pessoa *inicio, int id);
 void listarPessoa(Pessoa *inicio);
 void tarefasPendentes(Tarefa *inicio);
 void mostrarMenu();
@@ -76,7 +79,7 @@ void alterarStatus(Tarefa *inicio);
 void listarTarefa(Tarefa *inicio);
 void tarefasConcluidas(Tarefa *inicio);
 void tarefasPrioridade(Tarefa *inicio);
-void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID);
+void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pessoa **inicioUsuario);
 void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID);
 void menuTarefas();
 void menuUsuario();
@@ -116,7 +119,7 @@ int main(){
             break;
 
         case 2: // Gerenciar tarefas
-            opcaoTarefas(opcao, &inicio, &ultima, &listaIDtarefa);
+            opcaoTarefas(opcao, &inicio, &ultima, &listaIDtarefa, &inicioPessoa);
             break;
 
         case 0:
@@ -135,7 +138,7 @@ int main(){
 // ===============
 //  OPÇÃO TAREFAS
 // ===============
-void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID){
+void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pessoa **inicioUsuario){
     // Loop do Menu gerenciar tarefas
     do
     {
@@ -147,7 +150,7 @@ void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID){
         {
 
         case 1:
-            *ultima = cadastrarTarefas(inicio, *ultima, listaID);;
+            *ultima = cadastrarTarefas(inicio, *ultima, listaID, inicioUsuario);
             esperarEnter();
             break;
 
@@ -315,14 +318,16 @@ void menuUsuario()
 // =====================
 //  FUNÇÃO CRIAR TAREFA
 // =====================
-Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
+Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **inicioUsuario){
     Tarefa *novaTarefa = (Tarefa *)malloc(sizeof(Tarefa)); 
+
     if(novaTarefa == NULL){
         printf("\nErro ao alocar memória.");
         return ultima;
     }
 
     novaTarefa->proxima = NULL;
+    
     
     // Adicionar ID em forma sequencial
     novaTarefa->id = (*idTotal)++;
@@ -382,6 +387,62 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal){
 
     // Status pendente
     novaTarefa->status = 0;
+    
+    // Adicionar dificuldade
+    numeroDigitado = -1;
+    reset = 0;
+
+    do
+    {
+        printf("\n(1) BAIXA");
+        printf("\n(2) MEDIA");
+        printf("\n(3) ALTA");
+        printf("\nDigite a dificuldade da tarefa: ");
+        scanf("%d",&numeroDigitado);
+        if(numeroDigitado == 1 ||numeroDigitado == 2 ||numeroDigitado == 3){
+            novaTarefa->dificuldade = numeroDigitado;
+            reset = 1;
+        }
+    }while(reset == 0);
+    
+    // Adicionar responsavel
+    printf("Adicione o responsável pela tarefa: ");
+    Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario, novaTarefa->dificuldade);
+
+    if (pos != NULL){
+
+        pos = *inicioUsuario;
+
+        do
+        {
+            mostrarUsuario(buscarUsuarioPorDificuldade(pos, novaTarefa->dificuldade));
+        } while (pos!= NULL);
+        
+        do
+        {
+            printf("Digite o ID do usuário responsavel: ");
+            scanf("%d",&numeroDigitado);
+            pos = buscarIdUser(*inicioUsuario, numeroDigitado);
+            if (pos != NULL)
+            {
+                novaTarefa->responsavel = pos;
+                printf("Usuário atribuído com sucesso!\n");
+            }
+            else
+            {
+                novaTarefa->responsavel = NULL;
+                printf("Usuário não encontrado. Tente novamente.\n");
+            }
+
+        }while (pos == NULL);
+    }
+    else{
+        printf("Nenhum usuário com o nivel necessário para a tarefa. Adicione o responsavel posteriormente.");
+    }
+    
+    
+    
+    
 
 
     // Adicionar tarefa na lista
@@ -420,6 +481,7 @@ void mostrarTarefa(Tarefa *tarefa){
     printf("\n========== TAREFA (ID %d) =========",tarefa->id);
     printf("\nTítulo:%s",tarefa->titulo);
     printf("\nDescrição:%s",tarefa->descricao);
+    // Mostrar prioridade
     if (tarefa->prioridade == 1){
         printf("\nPrioridade: BAIXA(1)");
     }
@@ -429,12 +491,29 @@ void mostrarTarefa(Tarefa *tarefa){
     else if (tarefa->prioridade == 3){
         printf("\nPrioridade: ALTA(3)");
     }
-
+    // Mostrar Dificuldade
+    if (tarefa->dificuldade == 1){
+        printf("\nDificuldade: BAIXA(1)");
+    }
+    else if (tarefa->dificuldade == 2){
+        printf("\nDificuldade: MÉDIA(2)");
+    }
+    else if (tarefa->dificuldade == 3){
+        printf("\nDificuldade: ALTA(3)");
+    }
+    // Mostrar status
     if (tarefa->status == 0){
         printf("\nSTATUS: PENDENTE(0)");
     }
     else if (tarefa->status == 1){
         printf("\nSTATUS: CONCLUIDO(1)");
+    }
+    printf("\nUsuário responsavel: ");
+    if (tarefa->responsavel != NULL){
+        mostrarUsuario(tarefa->responsavel);
+    }
+    else{
+        printf("Nenhum usuário atribuido.");
     }
     printf("\n===================================");
 }
@@ -743,19 +822,12 @@ Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
         printf("\nDigite o nível do usuário: ");
         int numeroDigitado;
         scanf("%d",&numeroDigitado);
-        
-        if(numeroDigitado == 1){
-            strcpy(novaPessoa->nivel,"JUNIOR");
+        if (numeroDigitado == 1 || numeroDigitado == 2 || numeroDigitado == 3 ){
+            novaPessoa->nivel=numeroDigitado;
             reset = 1;
+            continue;
         }
-        else if(numeroDigitado == 2){
-            strcpy(novaPessoa->nivel,"PLENO");
-            reset = 1;
-        }
-        else if(numeroDigitado == 3){
-            strcpy(novaPessoa->nivel,"SENIOR");
-            reset = 1;
-        }
+        printf("\nDigite um valor válido");
     }while(reset == 0);
 
     // Adicionar usuário na lista
@@ -768,10 +840,8 @@ Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
         ultima=novaPessoa;
     }
     
-    return ultima;
-    printf("\nNível definido: %s",novaPessoa->nivel);
     printf("\nUsuário criado com sucesso!");
-    esperarEnter();
+    return ultima;
 }
 
 // ========================
@@ -863,18 +933,52 @@ void listarPessoa(Pessoa *inicio){
 // =======================
 //  FUNÇÃO MOSTRAR USUÁRIO
 // =======================
-void mostrarUsuario(Pessoa *usuario){
-    printf("\n========== USUÁRIO (ID %d) =========",usuario->id);
-    printf("\nNome:%s",usuario->nome);
-    printf("\nEmail:%s",usuario->email);
-    if (usuario->nivel == 1){
-        printf("\nCargo: JUNIOR(1)");
+Pessoa* mostrarUsuario(Pessoa *usuario){
+    if (usuario != NULL){
+        printf("\n========== USUÁRIO (ID %d) =========",usuario->id);
+        printf("\nNome:%s",usuario->nome);
+        printf("\nEmail:%s",usuario->email);
+        if (usuario->nivel == 1){
+            printf("\nCargo: JUNIOR(1)");
+        }
+        else if (usuario->nivel == 2){
+            printf("\nCargo: PLENO(2)");
+        }
+        else if (usuario->nivel == 3){
+            printf("\nCargo: SENIOR(3)");
+        }
+        printf("\n===================================");
+        return usuario;
     }
-    else if (usuario->nivel == 2){
-        printf("\nCargo: PLENO(2)");
+    return NULL;
+}
+
+// ========================================
+//  BUSCAR USUARIO COM NIVEL = DIFICULDADE
+// ========================================
+Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade){
+    Pessoa *pos = inicio;
+
+    while(pos != NULL){
+        if(pos->nivel== dificuldade){
+            return(pos);
+        }
+        pos = pos->proxima;
     }
-    else if (usuario->nivel == 3){
-        printf("\nCargo: SENIOR(3)");
+    return NULL;
+}
+
+// ====================
+//  BUSCAR USER POR ID
+// ====================
+Pessoa* buscarIdUser(Pessoa *inicio, int id){
+    Pessoa *pos = inicio;
+
+    while(pos != NULL){
+        if(pos->id == id){
+            return(pos);
+        }
+        pos = pos->proxima;
     }
-    printf("\n===================================");
+    return NULL;
 }
