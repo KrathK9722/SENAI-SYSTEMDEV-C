@@ -67,6 +67,7 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal, Pessoa *
 Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
 Tarefa* digitarTitulo(Tarefa *inicio);
+Tarefa* definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario);
 Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal);
 Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima);
 Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade);
@@ -189,7 +190,9 @@ void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pes
             esperarEnter();
             break;
         case 9:
-            definirResponsavel()
+            definirResponsavel(inicio, inicioUsuario);
+            esperarEnter();
+            break;
         case 0:
             printf("\nSaindo do menu...\n");
             break;
