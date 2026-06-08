@@ -32,6 +32,8 @@ Permitir alterar responsavel da tarefa
 Novo menu de gerenciamento da tarefa
 Menu de gerenciamento dos cadastros
 Menu de login do cadastro
+
+ARRUMAR MOSTRAR TAREFA PARANDO FUNCIONAMENTO AO MOSTRAR USUARIO NÃO CADASTRADO
 */
 
 //Bibliotecas
@@ -186,6 +188,8 @@ void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pes
             printf("\n =============================================");
             esperarEnter();
             break;
+        case 9:
+            definirResponsavel()
         case 0:
             printf("\nSaindo do menu...\n");
             break;
@@ -437,7 +441,9 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **
         }while (pos == NULL);
     }
     else{
+        novaTarefa->responsavel = NULL;
         printf("Nenhum usuário com o nivel necessário para a tarefa. Adicione o responsavel posteriormente.");
+
     }
     
     
@@ -509,11 +515,11 @@ void mostrarTarefa(Tarefa *tarefa){
         printf("\nSTATUS: CONCLUIDO(1)");
     }
     printf("\nUsuário responsavel: ");
-    if (tarefa->responsavel != NULL){
-        mostrarUsuario(tarefa->responsavel);
+    if (tarefa->responsavel == NULL){
+        printf("Nenhum usuário atribuido.");
     }
     else{
-        printf("Nenhum usuário atribuido.");
+        mostrarUsuario(tarefa->responsavel);
     }
     printf("\n===================================");
 }
@@ -981,4 +987,29 @@ Pessoa* buscarIdUser(Pessoa *inicio, int id){
         pos = pos->proxima;
     }
     return NULL;
+}
+
+Tarefa* definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario){
+    Tarefa *pos = *inicio;
+    
+     printf("\n ============== DEFINIR RESPONSÁVEL ===============");
+    char nome[100];
+
+    limparTexto();
+
+    do
+    { 
+        printf("\nDigite o titulo da tarefa que deseja remover: ");
+        fgets(nome,100,stdin);
+
+         nome[strcspn(nome, "\n")] = '\0'; 
+
+        if (strlen(nome) == 0) // 
+        {
+            printf("\nTitulo não pode ser vazio!");
+        }
+
+    } while (strlen(nome) == 0);
+
+
 }
