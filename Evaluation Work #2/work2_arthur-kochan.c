@@ -33,7 +33,7 @@ Novo menu de gerenciamento da tarefa
 Menu de gerenciamento dos cadastros
 Menu de login do cadastro
 
-ARRUMAR MOSTRAR TAREFA PARANDO FUNCIONAMENTO AO MOSTRAR USUARIO NÃO CADASTRADO
+Adicionar o sistema de Senior poder ver todos os niveis e pleno poder ver niveis abaixo do nivel 2
 */
 
 //Bibliotecas
@@ -67,7 +67,6 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima, int *idTotal, Pessoa *
 Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
 Tarefa* digitarTitulo(Tarefa *inicio);
-Tarefa* definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario);
 Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal);
 Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima);
 Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade);
@@ -82,6 +81,7 @@ void alterarStatus(Tarefa *inicio);
 void listarTarefa(Tarefa *inicio);
 void tarefasConcluidas(Tarefa *inicio);
 void tarefasPrioridade(Tarefa *inicio);
+void definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario);
 void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pessoa **inicioUsuario);
 void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID);
 void menuTarefas();
@@ -138,9 +138,44 @@ int main(){
     return 0;
 }    
 
-// ===============
-//  OPÇÃO TAREFAS
-// ===============
+// ================
+//  FUNÇÕES GERAIS
+// ================
+
+int lerOpcao()
+{
+    int opcao;
+    printf("Opcao: ");
+    scanf("%d", &opcao);
+    return opcao;
+}
+void limparTexto()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    limparTexto();
+    getchar();
+}
+// Menu visual inicial
+void mostrarMenu() 
+{
+    printf("\n\n==========================\n");
+    printf(" SISTEMA DE GERENCIAMENTO \n");
+    printf("==========================\n");
+    printf("1 - Gerenciar usuários\n");
+    printf("2 - Gerenciar tarefas\n");
+    printf("0 - Sair do sistema\n");
+}
+
+// =====================
+//  FUNÇÕES DAS TAREFAS
+// =====================
+
+// Opções do menu de tarefas
 void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pessoa **inicioUsuario){
     // Loop do Menu gerenciar tarefas
     do
@@ -203,80 +238,7 @@ void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pes
 
     } while (opcao != 0);
 }    
-
-// ================
-//  OPÇÃO USUÁRIOS
-// ================
-void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID){
-    // Loop do Menu gerenciar tarefas
-    do
-    {
-        system("cls");
-        menuUsuario();
-        opcao = lerOpcao();
-
-        switch (opcao)
-        {
-
-        case 1:
-            *ultima = cadastrarPessoa(inicio, *ultima, listaID);
-            esperarEnter();
-            break;
-
-        case 2:
-            listarPessoa(*inicio);
-            esperarEnter();
-            break;
-
-        case 3:
-            *ultima = removerPessoa(inicio, *ultima);
-            printf("\n =============================================");
-            esperarEnter();
-            break;
-        case 0:
-            printf("\nSaindo do menu...\n");
-            break;
-
-        default:
-            printf("\nOpção inválida!\n");
-        }
-
-    } while (opcao != 0);
-}   
-
-// ==================
-//  FUNÇÃO LER OPÇÃO
-// ==================
-int lerOpcao()
-{
-    int opcao;
-    printf("Opcao: ");
-    scanf("%d", &opcao);
-    return opcao;
-}
-
-// ====================
-//  FUNÇÃO LIMPAR CHAR
-// ====================
-void limparTexto()
-{
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-// ======================
-//  FUNÇÃO APERTAR ENTER
-// ======================
-void esperarEnter()
-{
-    printf("\nPressione ENTER para continuar...");
-    limparTexto();
-    getchar();
-}
-
-// =============================
-//  FUNÇÃO VER MENU DAS TAREFAS
-// =============================
+// Menu visual das tarefas
 void menuTarefas()
 {
     printf("\n\n=====================================\n");
@@ -294,37 +256,234 @@ void menuTarefas()
     printf("10 - Alterar dificuldade\n");
     printf("0 - Sair do menu\n");
 }
-
-// =================
-//  FUNÇÃO VER MENU 
-// =================
-void mostrarMenu()
-{
-    printf("\n\n==========================\n");
-    printf(" SISTEMA DE GERENCIAMENTO \n");
-    printf("==========================\n");
-    printf("1 - Gerenciar usuários\n");
-    printf("2 - Gerenciar tarefas\n");
-    printf("0 - Sair do sistema\n");
+void mostrarTarefa(Tarefa *tarefa){
+    printf("\n========== TAREFA (ID %d) =========",tarefa->id);
+    printf("\nTítulo:%s",tarefa->titulo);
+    printf("\nDescrição:%s",tarefa->descricao);
+    // Mostrar prioridade
+    if (tarefa->prioridade == 1){
+        printf("\nPrioridade: BAIXA(1)");
+    }
+    else if (tarefa->prioridade == 2){
+        printf("\nPrioridade: MÉDIA(2)");
+    }
+    else if (tarefa->prioridade == 3){
+        printf("\nPrioridade: ALTA(3)");
+    }
+    // Mostrar Dificuldade
+    if (tarefa->dificuldade == 1){
+        printf("\nDificuldade: BAIXA(1)");
+    }
+    else if (tarefa->dificuldade == 2){
+        printf("\nDificuldade: MÉDIA(2)");
+    }
+    else if (tarefa->dificuldade == 3){
+        printf("\nDificuldade: ALTA(3)");
+    }
+    // Mostrar status
+    if (tarefa->status == 0){
+        printf("\nSTATUS: PENDENTE(0)");
+    }
+    else if (tarefa->status == 1){
+        printf("\nSTATUS: CONCLUIDO(1)");
+    }
+    printf("\nUsuário responsavel: ");
+    if (tarefa->responsavel == NULL){
+        printf("Nenhum usuário atribuido.");
+    }
+    else{
+        mostrarUsuario(tarefa->responsavel);
+    }
+    printf("\n===================================");
 }
+void alterarStatus(Tarefa *inicio){
 
-// =============================
-//  FUNÇÃO VER MENU DAS TAREFAS
-// =============================
-void menuUsuario()
-{
-    printf("\n\n=====================================\n");
-    printf(" SISTEMA DE GERENCIAMENTO DE USUÁRIOS\n");
-    printf("=====================================\n");
-    printf("1 - Criar usuário\n");
-    printf("2 - Listar usuários\n");
-    printf("3 - Remover usuário\n");
-    printf("0 - Sair do menu\n");
+    printf("\n=========== Alterar Status ============");
+
+    Tarefa *tarefaAlvo = digitarTitulo(inicio);
+    int confirmar;
+    
+    if(tarefaAlvo != NULL)
+    {   
+        if (tarefaAlvo->status == 0){
+            printf("\n\nGostaria de alterar o status para CONCLUIDO? ");
+            printf("\nDigite o número 0 (SIM) ou 1 (NÃO): ");
+            scanf("%d",&confirmar);
+            if (confirmar==0){
+                tarefaAlvo->status=1;
+            }
+            else{
+                printf("\nO Status não foi alterado.");
+            }
+        }
+        else if (tarefaAlvo->status == 1){
+            printf("\nGostaria de alterar o status para PENDENTE? ");
+            printf("\nDigite o número 0 (SIM) ou 1 (NÃO): ");
+            scanf("%d",&confirmar);
+            if (confirmar==0){
+                tarefaAlvo->status=0;
+            }     
+            else{
+                printf("\nO Status não foi alterado.");
+            }
+        }
+    }
+    printf("\n======================================");
 }
+void listarTarefa(Tarefa *inicio){
+    Tarefa *pos = inicio;
+    
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa cadastrada.");
+        return;
+    }
 
-// =====================
-//  FUNÇÃO CRIAR TAREFA
-// =====================
+    printf("\n========== LISTA DE TAREFAS =========");
+
+    while(pos != NULL){
+        mostrarTarefa(pos);
+        pos=pos->proxima;
+    }
+    printf("\n=====================================");
+}
+void tarefasConcluidas(Tarefa *inicio){
+    Tarefa *pos = inicio;
+    
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa concluída.");
+        return;
+    }
+
+    printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
+
+    while(pos != NULL){
+        if(pos->status ==1){
+            mostrarTarefa(pos);
+        }
+        pos=pos->proxima;
+    }
+    printf("\n=====================================");
+}
+void tarefasPendentes(Tarefa *inicio){
+    Tarefa *pos = inicio;
+
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa pendente.");
+        return;
+    }
+
+    printf("\n========== LISTA DE TAREFAS PENDENTES =========");
+
+    while(pos != NULL){
+        if(pos->status ==0){
+            mostrarTarefa(pos);
+        }
+        pos=pos->proxima;
+    }
+    printf("\n=====================================");
+}
+void tarefasPrioridade(Tarefa *inicio){
+    Tarefa *pos = inicio;
+    int maior=0;
+
+    if(inicio == NULL){
+        printf("\nNenhuma tarefa cadastrada.");
+        return;
+    }
+
+    printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
+    
+    while(pos != NULL){
+        if(pos->prioridade > maior){
+            maior = pos->prioridade;
+        }
+        pos=pos->proxima;
+    }
+    
+    pos = inicio;
+
+    while(pos != NULL){
+        if(pos->prioridade ==maior){
+            mostrarTarefa(pos);
+        }
+        pos=pos->proxima;
+    }
+    printf("\n=====================================");
+}
+void definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario){
+    Tarefa *tarefaAtual;
+
+    if(*inicio == NULL){
+        printf("\nNenhuma tarefa cadastrada.");
+    }
+    else{
+        printf("\n============== DEFINIR RESPONSÁVEL ===============");
+        char nome[100];
+        int numeroDigitado;
+
+        limparTexto();
+
+        do
+        { 
+         printf("\nDigite o titulo da tarefa que deseja alterar: ");
+            fgets(nome,100,stdin);
+
+            nome[strcspn(nome, "\n")] = '\0'; 
+
+            if (strlen(nome) == 0) // 
+            {
+                printf("\nTitulo não pode ser vazio!");
+            }
+
+        } while (strlen(nome) == 0);
+    
+        tarefaAtual = buscarTarefa(*inicio, nome);
+        if (tarefaAtual == NULL){
+            printf("Tarefa não encontrada.");
+            return;
+        }
+        mostrarTarefa(tarefaAtual);
+
+    
+
+        // Adicionar responsavel
+        printf("\nAdicione o responsável pela tarefa: ");
+        Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario, tarefaAtual->dificuldade);
+
+        if (pos != NULL){
+
+            pos = *inicioUsuario;
+
+            do
+            {
+                mostrarUsuario(buscarUsuarioPorDificuldade(pos, tarefaAtual->dificuldade));
+            } while (pos!= NULL);
+        
+            do
+            {
+                printf("\nDigite o ID do usuário responsavel: ");
+                scanf("%d",&numeroDigitado);
+                pos = buscarIdUser(*inicioUsuario, numeroDigitado);
+                if (pos != NULL)
+                {
+                    tarefaAtual->responsavel = pos;
+                    printf("\nUsuário atribuído com sucesso!\n");
+                }
+                else
+                {
+                    tarefaAtual->responsavel = NULL;
+                    printf("\nUsuário não encontrado. Tente novamente.\n");
+                }
+
+            }while (pos == NULL);
+        }
+        else{
+            tarefaAtual->responsavel = NULL;
+            printf("\nNenhum usuário com o nivel necessário para a tarefa.");
+        }
+        printf("============== DEFINIR RESPONSÁVEL ===============");
+    }
+}
 Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **inicioUsuario){
     Tarefa *novaTarefa = (Tarefa *)malloc(sizeof(Tarefa)); 
 
@@ -467,10 +626,6 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **
     printf("\nTarefa criada com sucesso!");
     return ultima;
 }
-
-// ===============
-//  FUNÇÃO BUSCAR 
-// ===============
 Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado){
     Tarefa *pos = inicio;
     
@@ -482,92 +637,6 @@ Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado){
     }
     return NULL;
 }
-
-// =======================
-//  FUNÇÃO PRINTAR TAREFA
-// =======================
-void mostrarTarefa(Tarefa *tarefa){
-    printf("\n========== TAREFA (ID %d) =========",tarefa->id);
-    printf("\nTítulo:%s",tarefa->titulo);
-    printf("\nDescrição:%s",tarefa->descricao);
-    // Mostrar prioridade
-    if (tarefa->prioridade == 1){
-        printf("\nPrioridade: BAIXA(1)");
-    }
-    else if (tarefa->prioridade == 2){
-        printf("\nPrioridade: MÉDIA(2)");
-    }
-    else if (tarefa->prioridade == 3){
-        printf("\nPrioridade: ALTA(3)");
-    }
-    // Mostrar Dificuldade
-    if (tarefa->dificuldade == 1){
-        printf("\nDificuldade: BAIXA(1)");
-    }
-    else if (tarefa->dificuldade == 2){
-        printf("\nDificuldade: MÉDIA(2)");
-    }
-    else if (tarefa->dificuldade == 3){
-        printf("\nDificuldade: ALTA(3)");
-    }
-    // Mostrar status
-    if (tarefa->status == 0){
-        printf("\nSTATUS: PENDENTE(0)");
-    }
-    else if (tarefa->status == 1){
-        printf("\nSTATUS: CONCLUIDO(1)");
-    }
-    printf("\nUsuário responsavel: ");
-    if (tarefa->responsavel == NULL){
-        printf("Nenhum usuário atribuido.");
-    }
-    else{
-        mostrarUsuario(tarefa->responsavel);
-    }
-    printf("\n===================================");
-}
-
-// =======================
-//  FUNÇÃO ALTERAR STATUS
-// =======================
-void alterarStatus(Tarefa *inicio){
-
-    printf("\n=========== Alterar Status ============");
-
-    Tarefa *tarefaAlvo = digitarTitulo(inicio);
-    int confirmar;
-    
-    if(tarefaAlvo != NULL)
-    {   
-        if (tarefaAlvo->status == 0){
-            printf("\n\nGostaria de alterar o status para CONCLUIDO? ");
-            printf("\nDigite o número 0 (SIM) ou 1 (NÃO): ");
-            scanf("%d",&confirmar);
-            if (confirmar==0){
-                tarefaAlvo->status=1;
-            }
-            else{
-                printf("\nO Status não foi alterado.");
-            }
-        }
-        else if (tarefaAlvo->status == 1){
-            printf("\nGostaria de alterar o status para PENDENTE? ");
-            printf("\nDigite o número 0 (SIM) ou 1 (NÃO): ");
-            scanf("%d",&confirmar);
-            if (confirmar==0){
-                tarefaAlvo->status=0;
-            }     
-            else{
-                printf("\nO Status não foi alterado.");
-            }
-        }
-    }
-    printf("\n======================================");
-}
-
-// ===============================================
-//  FUNÇÃO DIGITAR TITULO (COMPLEMENTO DO BUSCAR)
-// ===============================================
 Tarefa* digitarTitulo(Tarefa *inicio){
     char nome[100] = "vazio";
             limparTexto();
@@ -602,10 +671,6 @@ Tarefa* digitarTitulo(Tarefa *inicio){
             }
 
 }
-
-// =======================
-//  FUNÇÃO REMOVER TAREFA
-// =======================
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
     printf("\n ============== REMOVER TAREFA ===============");
     char nome[100];
@@ -671,105 +736,74 @@ Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
     return ultima;
 }
 
-// ================
-//  LISTAR TAREFAS
-// ================
-void listarTarefa(Tarefa *inicio){
-    Tarefa *pos = inicio;
+// ======================
+//  FUNÇÕES DOS USUÁRIOS
+// ======================
+
+// Opções do menu de usuários
+void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID){
+    // Loop do Menu gerenciar tarefas
+    do
+    {
+        system("cls");
+        menuUsuario();
+        opcao = lerOpcao();
+
+        switch (opcao)
+        {
+
+        case 1:
+            *ultima = cadastrarPessoa(inicio, *ultima, listaID);
+            esperarEnter();
+            break;
+
+        case 2:
+            listarPessoa(*inicio);
+            esperarEnter();
+            break;
+
+        case 3:
+            *ultima = removerPessoa(inicio, *ultima);
+            printf("\n =============================================");
+            esperarEnter();
+            break;
+        case 0:
+            printf("\nSaindo do menu...\n");
+            break;
+
+        default:
+            printf("\nOpção inválida!\n");
+        }
+
+    } while (opcao != 0);
+}   
+// Menu visual dos usuário
+void menuUsuario()
+{
+    printf("\n\n=====================================\n");
+    printf(" SISTEMA DE GERENCIAMENTO DE USUÁRIOS\n");
+    printf("=====================================\n");
+    printf("1 - Criar usuário\n");
+    printf("2 - Listar usuários\n");
+    printf("3 - Remover usuário\n");
+    printf("0 - Sair do menu\n");
+}
+void listarPessoa(Pessoa *inicio){
+    Pessoa *pos = inicio;
     
     if(inicio == NULL){
-        printf("\nNenhuma tarefa cadastrada.");
+        printf("\nNenhum usuário cadastrado.");
         return;
     }
 
-    printf("\n========== LISTA DE TAREFAS =========");
+    printf("\n========== LISTA DE USUÁRIOS =========");
 
     while(pos != NULL){
-        mostrarTarefa(pos);
+        mostrarUsuario(pos);
         pos=pos->proxima;
     }
     printf("\n=====================================");
 }
-
-// =============================
-//  MOSTRAR  TAREFAS CONCLUIDAS
-// =============================
-void tarefasConcluidas(Tarefa *inicio){
-    Tarefa *pos = inicio;
-    
-    if(inicio == NULL){
-        printf("\nNenhuma tarefa concluída.");
-        return;
-    }
-
-    printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
-
-    while(pos != NULL){
-        if(pos->status ==1){
-            mostrarTarefa(pos);
-        }
-        pos=pos->proxima;
-    }
-    printf("\n=====================================");
-}
-
-// ============================
-//  MOSTRAR  TAREFAS PENDENTES
-// ============================
-void tarefasPendentes(Tarefa *inicio){
-    Tarefa *pos = inicio;
-
-    if(inicio == NULL){
-        printf("\nNenhuma tarefa pendente.");
-        return;
-    }
-
-    printf("\n========== LISTA DE TAREFAS PENDENTES =========");
-
-    while(pos != NULL){
-        if(pos->status ==0){
-            mostrarTarefa(pos);
-        }
-        pos=pos->proxima;
-    }
-    printf("\n=====================================");
-}
-
-// ======================================
-//  MOSTRAR  TAREFA PRIORIDADE MAIS ALTA
-// ======================================
-void tarefasPrioridade(Tarefa *inicio){
-    Tarefa *pos = inicio;
-    int maior=0;
-
-    if(inicio == NULL){
-        printf("\nNenhuma tarefa cadastrada.");
-        return;
-    }
-
-    printf("\n========== LISTA DE TAREFAS CONCLUIDAS =========");
-    
-    while(pos != NULL){
-        if(pos->prioridade > maior){
-            maior = pos->prioridade;
-        }
-        pos=pos->proxima;
-    }
-    
-    pos = inicio;
-
-    while(pos != NULL){
-        if(pos->prioridade ==maior){
-            mostrarTarefa(pos);
-        }
-        pos=pos->proxima;
-    }
-    printf("\n=====================================");
-}
-
-// ==========================
-//  FUNÇÃO CADASTRAR USUÁRIO
-// ==========================
 Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
     Pessoa *novaPessoa = (Pessoa *)malloc(sizeof(Pessoa)); 
     if(novaPessoa == NULL){ // Verifica se deu pra alocar memoria
@@ -852,10 +886,6 @@ Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
     printf("\nUsuário criado com sucesso!");
     return ultima;
 }
-
-// ========================
-//  FUNÇÃO REMOVER USUÁRIO
-// ========================
 Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
     printf("\n ============== REMOVER USUÁRIO ===============");
     char nome[100];
@@ -918,30 +948,6 @@ Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
     printf("\nUsuário não encontrado.");
     return ultima;
 }
-
-// ========================
-//  FUNÇÃO LISTAR USUÁRIOS
-// ========================
-void listarPessoa(Pessoa *inicio){
-    Pessoa *pos = inicio;
-    
-    if(inicio == NULL){
-        printf("\nNenhum usuário cadastrado.");
-        return;
-    }
-
-    printf("\n========== LISTA DE USUÁRIOS =========");
-
-    while(pos != NULL){
-        mostrarUsuario(pos);
-        pos=pos->proxima;
-    }
-    printf("\n=====================================");
-}
-
-// =======================
-//  FUNÇÃO MOSTRAR USUÁRIO
-// =======================
 Pessoa* mostrarUsuario(Pessoa *usuario){
     if (usuario != NULL){
         printf("\n========== USUÁRIO (ID %d) =========",usuario->id);
@@ -961,10 +967,6 @@ Pessoa* mostrarUsuario(Pessoa *usuario){
     }
     return NULL;
 }
-
-// ========================================
-//  BUSCAR USUARIO COM NIVEL = DIFICULDADE
-// ========================================
 Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade){
     Pessoa *pos = inicio;
 
@@ -976,10 +978,6 @@ Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade){
     }
     return NULL;
 }
-
-// ====================
-//  BUSCAR USER POR ID
-// ====================
 Pessoa* buscarIdUser(Pessoa *inicio, int id){
     Pessoa *pos = inicio;
 
@@ -992,27 +990,3 @@ Pessoa* buscarIdUser(Pessoa *inicio, int id){
     return NULL;
 }
 
-Tarefa* definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario){
-    Tarefa *pos = *inicio;
-    
-     printf("\n ============== DEFINIR RESPONSÁVEL ===============");
-    char nome[100];
-
-    limparTexto();
-
-    do
-    { 
-        printf("\nDigite o titulo da tarefa que deseja remover: ");
-        fgets(nome,100,stdin);
-
-         nome[strcspn(nome, "\n")] = '\0'; 
-
-        if (strlen(nome) == 0) // 
-        {
-            printf("\nTitulo não pode ser vazio!");
-        }
-
-    } while (strlen(nome) == 0);
-
-
-}
