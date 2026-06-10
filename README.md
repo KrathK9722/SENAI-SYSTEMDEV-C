@@ -24,4 +24,7 @@ Need to create release of:
 - Activitie #14 (Find Number in Vector)
 - Activitie #15 (Students List)
 - Activitie #16 (Double Vector)
+- Activitie #17 (Temperature through the week)
+- Activitie #19 (Hello, Welcome)
+- Activitie #20 (Hello#2 Function)
 ---------------------------------------------------------------------------------------
