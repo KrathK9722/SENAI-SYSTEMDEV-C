@@ -27,4 +27,12 @@ Need to create release of:
 - Activitie #17 (Temperature through the week)
 - Activitie #19 (Hello, Welcome)
 - Activitie #20 (Hello#2 Function)
+- Activitie #21 (Hello#2 Function)
+- Activitie #22 (Hello#2 Function)
+- Activitie #23 (Hello#2 Function)
+- Activitie #24 (Hello#2 Function)
+- Activitie #25 (Hello#2 Function)
+- Activitie #26 (Hello#2 Function)
+- Evaluation Work #1 (Inventory Management)
+- Evaluation Work #2 (Task Manager)
 ---------------------------------------------------------------------------------------
