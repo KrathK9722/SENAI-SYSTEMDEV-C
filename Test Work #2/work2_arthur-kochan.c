@@ -257,6 +257,8 @@ void menuTarefas()
     printf("0 - Sair do menu\n");
 }
 void mostrarTarefa(Tarefa *tarefa){
+    Pessoa *responsavel = tarefa->responsavel;
+
     printf("\n========== TAREFA (ID %d) =========",tarefa->id);
     printf("\nTítulo:%s",tarefa->titulo);
     printf("\nDescrição:%s",tarefa->descricao);
@@ -288,11 +290,11 @@ void mostrarTarefa(Tarefa *tarefa){
         printf("\nSTATUS: CONCLUIDO(1)");
     }
     printf("\nUsuário responsavel: ");
-    if (tarefa->responsavel == NULL){
+    if (responsavel == NULL){
         printf("Nenhum usuário atribuido.");
     }
     else{
-        mostrarUsuario(tarefa->responsavel);
+        printf(" %s \nEmail: %s",responsavel->nome,responsavel->email);
     }
     printf("\n===================================");
 }
@@ -453,12 +455,8 @@ void definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario){
         if (pos != NULL){
 
             pos = *inicioUsuario;
-
-            do
-            {
-                mostrarUsuario(buscarUsuarioPorDificuldade(pos, tarefaAtual->dificuldade));
-            } while (pos!= NULL);
-        
+            mostrarUsuario(buscarUsuarioPorDificuldade(pos, tarefaAtual->dificuldade));  
+                
             do
             {
                 printf("\nDigite o ID do usuário responsavel: ");
@@ -578,15 +576,11 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **
     if (pos != NULL){
 
         pos = *inicioUsuario;
-
-        do
-        {
-            mostrarUsuario(buscarUsuarioPorDificuldade(pos, novaTarefa->dificuldade));
-        } while (pos!= NULL);
+        mostrarUsuario(buscarUsuarioPorDificuldade(pos, novaTarefa->dificuldade));
         
         do
         {
-            printf("Digite o ID do usuário responsavel: ");
+            printf("\nDigite o ID do usuário responsavel: ");
             scanf("%d",&numeroDigitado);
             pos = buscarIdUser(*inicioUsuario, numeroDigitado);
             if (pos != NULL)
