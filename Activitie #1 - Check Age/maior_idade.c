@@ -1,5 +1,9 @@
 #include <stdio.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 void main(){
     char nome[30];
     int idade;
@@ -28,4 +32,5 @@ void main(){
     printf("Age: %d years", idade);
     printf("\nHeight: %.2f", altura);
     printf("\n===================================================");
+    esperarEnter();
 }
