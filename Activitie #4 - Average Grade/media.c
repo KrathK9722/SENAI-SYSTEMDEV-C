@@ -1,32 +1,41 @@
 #include <stdio.h>
 #include <windows.h>
-
-void main(){
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
+int main(void){
 
     SetConsoleOutputCP(65001);
-    SetConsoleCP(65001);
-
-    float nota[3],media,soma=0;
     
-    for(int i=0;i<=2;i++){
-      printf("Digite sua %d° nota: ",i+1);
-      scanf("%f", &nota[i]);
-
-      soma = soma + nota[i];
+    //Variaveis
+    int nota[8],numeroDigitado;
+    float media,soma=0;
+    
+    //Loop adicionar notas
+    for(int i=0;i<8;i++){
+        printf("\nDigite a %dª nota:",i+1);
+        scanf("%d",&numeroDigitado);
+        if((numeroDigitado >=0) & (numeroDigitado<=10)){
+            nota[i] = numeroDigitado;
+            soma = soma + nota[i];
+        }
+        else{
+            printf("\nValor digitado é inválido");
+            i--;
+        }
     }
-
-    media = soma / 3; 
-
+    media = soma / 8; 
+    
+    //Verifica valor média
     if (media >= 7){
       printf("\nVocê passou de ano com média: %.2f",media);
-      printf("\nNota #1: %.2f",nota[0]);
-      printf("\nNota #2: %.2f",nota[1]);
-      printf("\nNota #3: %.2f",nota[2]);
     }
     else{
-      printf("\nVocê não passou de ano, sua média foi: %.2f",media);
-      printf("\nNota #1: %.2f",nota[0]);
-      printf("\nNota #2: %.2f",nota[1]);
-      printf("\nNota #3: %.2f",nota[2]);
+      printf("\nVocê passou de ano com média: %.2f",media);
     }
+    printf("\nSoma das notas: %.2f",soma);
+    printf("\nSua média: %.2f",media);
+    esperarEnter();
 }

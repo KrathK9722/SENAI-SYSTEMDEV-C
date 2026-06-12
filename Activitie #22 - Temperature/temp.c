@@ -11,7 +11,11 @@ float celsiusParaFahrenheit(float celsius){
 float celsiusParaKelvin(float celsius){
     return celsius + 273.15;
 }
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(){
     SetConsoleOutputCP(65001);
     printf("Digite a temperatura em Celsius: ");
@@ -21,4 +25,6 @@ int main(){
     kelvin = celsiusParaKelvin(celsius);
 
     printf("%.1f°C → %.1f°F → %.2f K",celsius,fahrenheit,kelvin);
+
+    esperarEnter();
 }

@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
     int numero[6],i;
@@ -28,5 +32,6 @@ int main(void){
             printf("%d}",numero[i]);
         }
     }
+    esperarEnter();
 
 }

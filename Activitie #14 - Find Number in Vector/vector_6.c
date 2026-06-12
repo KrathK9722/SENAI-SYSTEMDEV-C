@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
     int numero[8] = {15, 42, 8, 73, 29, 61, 4, 37},numeroDigitado;
@@ -18,4 +22,5 @@ int main(void){
             printf("Número não foi encontrado");
         }
     }
+    esperarEnter();
 }

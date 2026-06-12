@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
     float base, altura, area;
@@ -22,6 +26,6 @@ int main(void){
     else{
         printf("Valor da sua área ficou menor que 0, digite valores válidos.");
     }
-
+    esperarEnter();
 
 }

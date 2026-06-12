@@ -9,10 +9,15 @@ int quadradoN(int numero){
 int cuboN(int numero){
     return quadradoN(numero) * numero;
 }
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(){
     SetConsoleOutputCP(65001);
     printf("\n\nDigite seu número: ");
     scanf("%d",&numero);
     printf("%d² = %d   %d³ = %d\n\n",numero,quadradoN(numero),numero,cuboN(numero));
+    esperarEnter();
 }

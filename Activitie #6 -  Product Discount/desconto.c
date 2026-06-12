@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
@@ -20,5 +24,5 @@ int main(void){
     else{
         printf("Valor da sua compra ficou: R$%.2f",valorFinal);
     }
-    
+    esperarEnter();
 }

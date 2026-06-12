@@ -4,8 +4,13 @@
 //Variaveis
 char pessoas[3][30] = {"Ana","Carlos","Beatriz"};
 
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 
-
+//Protótipo da função
 void hello(char nome[]);
 
 
@@ -16,6 +21,7 @@ int main(){
     }
 }
 
+// Função
 void hello(char nome[]){
     printf("\nOlá, %s!",nome);
 }

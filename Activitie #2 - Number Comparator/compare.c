@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 void main(){
     SetConsoleOutputCP(65001);
     float n,media=0,maior=0,soma=0;
@@ -22,4 +26,5 @@ void main(){
     printf("\nAverage: %.2f",media);
     printf("\nBiggest Number: %.2f",maior);
     printf("\n====================================");
+    esperarEnter();
 }

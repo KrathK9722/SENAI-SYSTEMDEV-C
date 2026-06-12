@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
     int nota[10], maior,menor;
@@ -22,6 +26,7 @@ int main(void){
         }
     }
 
-    printf("Maior número: %d",maior);
-    printf("Menor número: %d",menor);
+    printf("\n\nMaior número: %d",maior);
+    printf("\nMenor número: %d",menor);
+    esperarEnter();
 }

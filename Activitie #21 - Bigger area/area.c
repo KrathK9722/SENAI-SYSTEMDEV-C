@@ -10,7 +10,11 @@ float areaTriangulo(float base, float altura){
 float areaRetangulo(float base, float altura){
     return base*altura;
 }
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(){
     SetConsoleOutputCP(65001);
     printf("Digite a base em metros: ");
@@ -27,6 +31,7 @@ int main(){
     else if (area[0] = area[1]){
         printf("O retangulo e o triangulo tem uma área igual de %.1fm2.",area[0]);
     }
-    
+    esperarEnter();
     //Impossivel área do triangulo ficar maior que a área do retangulo.
+    
 }

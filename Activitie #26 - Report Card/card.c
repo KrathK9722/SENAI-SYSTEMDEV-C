@@ -3,6 +3,11 @@
 
 float notas[5];
 
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 void lerNota(){
    for (int i=0;i<5;i++){
         printf("Digite a nota do %dº aluno: ",i+1);
@@ -53,4 +58,5 @@ int main(){
     SetConsoleOutputCP(65001);
     lerNota();
     imprimirBoletim();
+    esperarEnter();
 }

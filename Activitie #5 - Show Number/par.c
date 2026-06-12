@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
@@ -21,5 +25,5 @@ int main(void){
     }
     
     printf("O número %d %s e %s",number,parOuImpar,negativoOuPositivo);
-    
+    esperarEnter();
 }

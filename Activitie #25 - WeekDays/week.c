@@ -27,12 +27,16 @@ char* nomeDoDia(int dia){
         break;
     }
 }
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(){
     SetConsoleOutputCP(65001);
     for (int i = 1; i <= 7; i++)
     {
         printf("\nDia %d: %s",i,nomeDoDia(i));
     }
-    
+    esperarEnter();
 }

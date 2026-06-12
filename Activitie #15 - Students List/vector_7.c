@@ -11,7 +11,11 @@ Creator: KrathK - Arthur Kochan
 #include <stdio.h>
 #include <windows.h>
 
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
 
@@ -47,5 +51,6 @@ int main(void){
           printf("\n%s",aluno[i]);
         }
     }
+    esperarEnter();
 
 }

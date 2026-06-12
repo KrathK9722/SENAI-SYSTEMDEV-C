@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     SetConsoleOutputCP(65001);
 
@@ -28,4 +32,5 @@ int main(void){
     for(i=0;i<5;i++){
         printf("\nValor da %dº posição:%d",i,number[i]);
     }
+    esperarEnter();
 }

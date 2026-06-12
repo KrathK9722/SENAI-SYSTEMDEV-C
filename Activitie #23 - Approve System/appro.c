@@ -18,7 +18,11 @@ char* statusAluno(float nota){
     }
     return status;
 }
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 void imprimirResultado(float nota,char *status){
  printf("Nota: %.2f  Status: %s",nota,status);
 }
@@ -29,4 +33,5 @@ int main(){
     char *status;
     status = statusAluno(nota);
     imprimirResultado(nota,status);
+    esperarEnter();
 }

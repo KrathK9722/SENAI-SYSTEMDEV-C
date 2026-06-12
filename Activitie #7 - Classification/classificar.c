@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
-
+void esperarEnter()
+{
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 int main(void){
     int idade;
 
@@ -18,5 +22,5 @@ int main(void){
     else{
         printf("Idade inválida.");
     }
-
+    esperarEnter();
 }
