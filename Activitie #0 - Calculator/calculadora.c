@@ -39,7 +39,7 @@ float calculadora(float a, float b, int operacao) {
     }
 }
 
-void main() {
+int main() {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
     while(opcao != 0) {
