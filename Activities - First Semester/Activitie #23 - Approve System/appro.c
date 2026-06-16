@@ -20,6 +20,7 @@ char* statusAluno(float nota){
 }
 void esperarEnter()
 {
+    while (getchar() != '\n'); 
     printf("\nPressione ENTER para continuar...");
     getchar();
 }

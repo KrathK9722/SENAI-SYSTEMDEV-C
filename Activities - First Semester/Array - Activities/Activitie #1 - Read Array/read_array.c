@@ -6,6 +6,7 @@ int array[3][4];
 
 void esperarEnter()
 {
+    while (getchar() != '\n'); 
     printf("\nPressione ENTER para continuar...");
     getchar();
 }

@@ -6,6 +6,7 @@ char pessoas[3][30] = {"Ana","Carlos","Beatriz"};
 
 void esperarEnter()
 {
+    while (getchar() != '\n'); 
     printf("\nPressione ENTER para continuar...");
     getchar();
 }

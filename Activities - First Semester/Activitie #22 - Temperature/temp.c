@@ -13,6 +13,7 @@ float celsiusParaKelvin(float celsius){
 }
 void esperarEnter()
 {
+    while (getchar() != '\n'); 
     printf("\nPressione ENTER para continuar...");
     getchar();
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 void esperarEnter()
 {
+    while (getchar() != '\n'); 
     printf("\nPressione ENTER para continuar...");
     getchar();
 }

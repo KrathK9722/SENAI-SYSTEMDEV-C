@@ -6,6 +6,12 @@
 float valor[2];
 int opcao = -1;
 
+void esperarEnter()
+{
+    while (getchar() != '\n'); 
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
 void valorEscolhido() {
     printf("Digite o primeiro valor:");
     scanf("%f", &valor[0]);
@@ -70,4 +76,5 @@ int main() {
         }
             
     }
+    esperarEnter();
 }
