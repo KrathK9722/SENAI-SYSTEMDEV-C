@@ -34,6 +34,6 @@ int main(){
         }
     }
 
-    printf("Biggest number:",biggest);
+    printf("Biggest number: %d",biggest);
     esperarEnter();
 }
