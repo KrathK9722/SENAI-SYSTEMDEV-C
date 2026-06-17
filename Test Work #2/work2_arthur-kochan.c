@@ -68,8 +68,8 @@ Tarefa* buscarTarefa(Tarefa *inicio, char *tituloDigitado);
 Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima);
 Tarefa* digitarTitulo(Tarefa *inicio);
 Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal);
-Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima);
-Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade);
+Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima, Tarefa **inicioTarefa);
+Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, Pessoa *inicioSalvo, int dificuldade);
 Pessoa* mostrarUsuario(Pessoa *usuario);
 Pessoa* buscarIdUser(Pessoa *inicio, int id);
 void listarPessoa(Pessoa *inicio);
@@ -83,7 +83,7 @@ void tarefasConcluidas(Tarefa *inicio);
 void tarefasPrioridade(Tarefa *inicio);
 void definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario);
 void opcaoTarefas(int opcao, Tarefa **inicio, Tarefa **ultima, int *listaID, Pessoa **inicioUsuario);
-void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID);
+void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID,Tarefa **inicioTarefa);
 void menuTarefas();
 void menuUsuario();
 int lerOpcao();
@@ -118,7 +118,7 @@ int main(){
         {
 
         case 1: // Gerenciar usuários
-            opcaoUsuarios(opcao, &inicioPessoa, &ultimaPessoa, &listaIDPessoa);
+            opcaoUsuarios(opcao, &inicioPessoa, &ultimaPessoa, &listaIDPessoa,&inicio);
             break;
 
         case 2: // Gerenciar tarefas
@@ -253,7 +253,6 @@ void menuTarefas()
     printf("7 - Ver tarefas de maior prioridade\n");
     printf("8 - Remover tarefa\n");
     printf("9 - Definir responsável\n");
-    printf("10 - Alterar dificuldade\n");
     printf("0 - Sair do menu\n");
 }
 void mostrarTarefa(Tarefa *tarefa){
@@ -450,12 +449,15 @@ void definirResponsavel(Tarefa **inicio, Pessoa **inicioUsuario){
 
         // Adicionar responsavel
         printf("\nAdicione o responsável pela tarefa: ");
-        Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario, tarefaAtual->dificuldade);
+        Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario,*inicioUsuario, tarefaAtual->dificuldade);
 
         if (pos != NULL){
 
             pos = *inicioUsuario;
-            mostrarUsuario(buscarUsuarioPorDificuldade(pos, tarefaAtual->dificuldade));  
+            while (pos != NULL){
+                pos = buscarUsuarioPorDificuldade(*inicioUsuario, pos, tarefaAtual->dificuldade);
+                mostrarUsuario(pos);  
+            }
                 
             do
             {
@@ -735,7 +737,7 @@ Tarefa* removerTarefa(Tarefa **inicio, Tarefa *ultima){
 // ======================
 
 // Opções do menu de usuários
-void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID){
+void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID,Tarefa **inicioTarefa){
     // Loop do Menu gerenciar tarefas
     do
     {
@@ -757,7 +759,7 @@ void opcaoUsuarios(int opcao, Pessoa **inicio, Pessoa **ultima, int *listaID){
             break;
 
         case 3:
-            *ultima = removerPessoa(inicio, *ultima);
+            *ultima = removerPessoa(inicio, *ultima,inicioTarefa);
             printf("\n =============================================");
             esperarEnter();
             break;
@@ -880,7 +882,7 @@ Pessoa* cadastrarPessoa(Pessoa **inicio, Pessoa *ultima, int *idTotal){
     printf("\nUsuário criado com sucesso!");
     return ultima;
 }
-Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
+Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima, Tarefa **inicioTarefa){
     printf("\n ============== REMOVER USUÁRIO ===============");
     char nome[100];
 
@@ -912,12 +914,20 @@ Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
 
             int confirmar;
 
+            Tarefa *tarefa = *inicioTarefa;
+
             printf("\n\nDeseja realmente remover?");
             printf("\nDigite 0 (SIM) ou 1 (NÃO): ");
             scanf("%d",&confirmar);
 
             if(confirmar == 0){
-
+    
+                while (tarefa != NULL){
+                    if (tarefa->responsavel == atual){
+                        tarefa->responsavel = NULL;
+                    }
+                    tarefa = tarefa->proxima;
+                }
                 if(anterior == NULL){
                     *inicio = atual->proxima;
                 }
@@ -934,7 +944,7 @@ Pessoa* removerPessoa(Pessoa **inicio, Pessoa *ultima){
                 printf("\nUsuário removido com sucesso do sistema.");
 
                 return ultima;
-            }
+                }
         }
         anterior = atual;
         atual = atual->proxima;
@@ -961,11 +971,17 @@ Pessoa* mostrarUsuario(Pessoa *usuario){
     }
     return NULL;
 }
-Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, int dificuldade){
-    Pessoa *pos = inicio;
+Pessoa* buscarUsuarioPorDificuldade(Pessoa *inicio, Pessoa *inicioSalvo, int dificuldade){
+    Pessoa *pos;
+    if (inicioSalvo == inicio){
+        pos = inicio;
+    }
+    else{
+        pos = inicioSalvo->proxima;
+    }
 
     while(pos != NULL){
-        if(pos->nivel== dificuldade){
+        if(pos->nivel>= dificuldade){
             return(pos);
         }
         pos = pos->proxima;
