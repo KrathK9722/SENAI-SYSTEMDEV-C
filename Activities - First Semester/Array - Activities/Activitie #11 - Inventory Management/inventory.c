@@ -30,7 +30,7 @@ int main(){
         switch(option){
             case 1:
                 clean();
-                enteringNumbers();
+                enteringNumbers(enterprise);
                 filled = 1;
                 waitEnter();
                 break;
@@ -45,16 +45,6 @@ int main(){
                 waitEnter();
                 break;
             case 3:
-                clean();
-                if(filled == 1){
-                    showBiggest(enterprise);
-                }
-                else{
-                    printf("Fill the array first...");
-                }
-                waitEnter();
-                break;
-            case 4:
                 clean();
                 if(filled == 1){
                     sumArray(enterprise);
