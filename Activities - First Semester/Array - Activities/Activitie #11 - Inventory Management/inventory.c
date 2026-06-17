@@ -40,7 +40,7 @@ int main(){
                     showArray(enterprise);
                 }
                 else{
-                    printf("Fill the array first...");
+                    printf("Fill the inventory first...");
                 }
                 waitEnter();
                 break;
@@ -50,7 +50,7 @@ int main(){
                     sumArray(enterprise);
                 }
                 else{
-                    printf("Fill the array first...");
+                    printf("Fill the inventory first...");
                 }
                 waitEnter();
                 break;
@@ -78,7 +78,7 @@ void waitEnter()
 void enteringNumbers(int enterprise[NL][NC]){
     for (int i=0;i<NL;i++){
         for (int j=0;j<NC;j++){
-            printf("\nEnter the product #%d quantity of the branch #%d [%d]:",j,i);
+            printf("\nEnter the quantity of the product #%d - enterprise branch #%d:",j+1,i+1);
             scanf("%d",&enterprise[i][j]);
         }
     }
@@ -92,12 +92,12 @@ void menu(){
     printf("\nSelect an option: ");
 }
 void showArray(int enterprise[NL][NC]){
-        printf("\nColumn:  ");
+        printf("\nInventory:  ");
         for (int j=0;j<NC;j++){
             printf("%d   ",j);
         }
         for (int i=0;i<NL;i++){
-            printf("\nLine %d: ",i);
+            printf("\nBranch #%d: ",i+1);
             for(int j=0;j<NC;j++){
                 printf("[%d] ",enterprise[i][j]);
             }
@@ -116,7 +116,7 @@ void sumArray(int enterprise[NL][NC]){
             }
         }
     for(int i=0;i<NL;i++){
-        printf("\nTotal inventory Branch #%d+1: %d",i,aux[i]);
+        printf("\nTotal inventory Branch #%d: %d",i+1,aux[i]);
     }
     printf("\nTotal Enterprise stock: %d",total);
 }
