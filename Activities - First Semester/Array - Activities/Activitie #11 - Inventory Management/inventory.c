@@ -2,16 +2,16 @@
 #include <windows.h>
 
 //Variável global modificavel
-#define NL 5
+#define NL 3
 #define NC 5
 
 //Protótipos
 void waitEnter();
 void menu();
-void enteringNumbers(int array[NL][NC]);
-void showArray(int array[NL][NC]);
-void showBiggest(int array[NL][NC]);
-void sumArray(int array[NL][NC]);
+void enteringNumbers(int enterprise[NL][NC]);
+void showArray(int enterprise[NL][NC]);
+void showBiggest(int enterprise[NL][NC]);
+void sumArray(int enterprise[NL][NC]);
 void clean();
 
 // ===============
@@ -20,7 +20,7 @@ void clean();
 int main(){
     SetConsoleOutputCP(65001);
     
-    int array[NL][NC], option=0; 
+    int enterprise[NL][NC], option=0; 
     int filled = 0;
 
     do{
@@ -30,14 +30,14 @@ int main(){
         switch(option){
             case 1:
                 clean();
-                enteringNumbers(array);
+                enteringNumbers();
                 filled = 1;
                 waitEnter();
                 break;
             case 2:
                 clean();
                 if(filled == 1){
-                    showArray(array);
+                    showArray(enterprise);
                 }
                 else{
                     printf("Fill the array first...");
@@ -47,7 +47,7 @@ int main(){
             case 3:
                 clean();
                 if(filled == 1){
-                    showBiggest(array);
+                    showBiggest(enterprise);
                 }
                 else{
                     printf("Fill the array first...");
@@ -57,7 +57,7 @@ int main(){
             case 4:
                 clean();
                 if(filled == 1){
-                    sumArray(array);
+                    sumArray(enterprise);
                 }
                 else{
                     printf("Fill the array first...");
@@ -85,24 +85,23 @@ void waitEnter()
     printf("\nPress ENTER to continue...");
     getchar();
 }
-void enteringNumbers(int array[NL][NC]){
+void enteringNumbers(int enterprise[NL][NC]){
     for (int i=0;i<NL;i++){
         for (int j=0;j<NC;j++){
-            printf("\nEnter the number of array[%d][%d]:",i,j);
-            scanf("%d",&array[i][j]);
+            printf("\nEnter the product #%d quantity of the branch #%d [%d]:",j,i);
+            scanf("%d",&enterprise[i][j]);
         }
     }
 }
 void menu(){
-    printf("\n====== ARRAYS ======");
-    printf("\n1 - Fill array");
-    printf("\n2 - Show array");
-    printf("\n3 - Show biggest number");
-    printf("\n4 - Sum array numbers");
+    printf("\n====== ENTERPRISE ======");
+    printf("\n1 - Fill inventory");
+    printf("\n2 - Show inventory");
+    printf("\n3 - Sum total inventory");
     printf("\n0 - Sair do menu");
     printf("\nSelect an option: ");
 }
-void showArray(int array[NL][NC]){
+void showArray(int enterprise[NL][NC]){
         printf("\nColumn:  ");
         for (int j=0;j<NC;j++){
             printf("%d   ",j);
@@ -110,34 +109,24 @@ void showArray(int array[NL][NC]){
         for (int i=0;i<NL;i++){
             printf("\nLine %d: ",i);
             for(int j=0;j<NC;j++){
-                printf("[%d] ",array[i][j]);
+                printf("[%d] ",enterprise[i][j]);
             }
 
         }
 }
-void showBiggest(int array[NL][NC]){
-    int biggest = array[0][0];
-    int x=0,y=0;
-
-    for (int i=0;i<NL;i++){
-        for (int j=0;j<NC;j++){
-            if (array[i][j] > biggest){
-                biggest = array[i][j];
-                x = i;
-                y = j;
-            }
-        }
+void sumArray(int enterprise[NL][NC]){
+    int aux[NL], total=0;
+    for(int i=0;i<NL;i++){
+        aux[i] = 0;
     }
-    printf("\nThe biggest number is: %d", biggest);
-    printf("\nPosition in the array: [%d][%d]",x,y);
-}
-void sumArray(int array[NL][NC]){
-    int aux = 0;
-
     for (int i=0;i<NL;i++){
         for (int j=0;j<NC;j++){
-             aux += array[i][j];
+             aux[i] += enterprise[i][j];
+             total += enterprise[i][j];
             }
         }
-    printf("The array sum is: %d", aux);
+    for(int i=0;i<NL;i++){
+        printf("\nTotal inventory Branch #%d+1: %d",i,aux[i]);
+    }
+    printf("\nTotal Enterprise stock: %d",total);
 }
