@@ -67,7 +67,7 @@ int main(){
 
 //Funções
 void clean(){
-    printf("\e[1;1H\e[2J");
+    system("cls");
 }
 void waitEnter()
 {
