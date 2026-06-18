@@ -573,13 +573,15 @@ Tarefa* cadastrarTarefas(Tarefa **inicio, Tarefa *ultima,int *idTotal, Pessoa **
     
     // Adicionar responsavel
     printf("Adicione o responsável pela tarefa: ");
-    Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario, novaTarefa->dificuldade);
+    Pessoa *pos = buscarUsuarioPorDificuldade(*inicioUsuario, *inicioUsuario, novaTarefa->dificuldade);
 
     if (pos != NULL){
 
         pos = *inicioUsuario;
-        mostrarUsuario(buscarUsuarioPorDificuldade(pos, novaTarefa->dificuldade));
-        
+        while (pos != NULL){
+            pos = buscarUsuarioPorDificuldade(*inicioUsuario, pos, novaTarefa->dificuldade);
+            mostrarUsuario(pos);  
+        }
         do
         {
             printf("\nDigite o ID do usuário responsavel: ");
