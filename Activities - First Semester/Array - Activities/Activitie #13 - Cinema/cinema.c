@@ -84,6 +84,7 @@ void showRoom(int seat[NL][NC]){
     printf("\n|            MOVIE ROOM          |");
     printf("\n|                                |");
     printf("\n|     1  2   3  4   5  6   7  8  |");
+    printf("\n|                                |");
     printf("\n|1#F  %d  %d X %d  %d   %d  %d X %d  %d  |", seat[0][0],seat[0][1],seat[0][2],seat[0][3],seat[0][4],seat[0][5],seat[0][6],seat[0][7]);
     printf("\n|2#E  %d  %d   %d  %d   %d  %d   %d  %d  |", seat[1][0],seat[1][1],seat[1][2],seat[1][3],seat[1][4],seat[1][5],seat[1][6],seat[1][7]);
     printf("\n|3#D  %d  %d   %d  %d   %d  %d   %d  %d  |", seat[2][0],seat[2][1],seat[2][2],seat[2][3],seat[2][4],seat[2][5],seat[2][6],seat[2][7]);
