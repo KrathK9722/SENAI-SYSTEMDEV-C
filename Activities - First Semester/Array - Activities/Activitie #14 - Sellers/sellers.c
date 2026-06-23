@@ -94,7 +94,7 @@ void showRoom(int seat[NL][NC]){
     printf("\n|                                |");
     printf("\n|              SCREEN            |");
     printf("\n|                                |");
-    printf("\n|Released = 0                        |");
+    printf("\n|Free = 0                        |");
     printf("\n|Ocuppied = 1                    |");
     printf("\n|________________________________|");
 }
@@ -128,7 +128,7 @@ void reserveSeat(int seat[NL][NC]){
 void freeSeat(int seat[NL][NC]){
     int seatLine;
     int seatColumn;
-    printf("\nSelect the seat you want to release");
+    printf("\nSelect the seat you want to free up");
     printf("\nLine(Number):");
     scanf("%d",&seatLine);
     printf("\nColumn:");
@@ -138,7 +138,7 @@ void freeSeat(int seat[NL][NC]){
         seatColumn--;
         if (seat[seatLine][seatColumn] == 1){
             seat[seatLine][seatColumn] = 0;
-            printf("\nThis seat is released now!");
+            printf("\nThs seat is free now!");
         }
         else{
             printf("\nThis seat is not taken!");
@@ -159,5 +159,5 @@ void total(int seat[NL][NC]){
             }
         }
     }
-    printf("\nThe total amount of released seats is: %d",total);
+    printf("\nThe total amount of free seats is: %d",total);
 }

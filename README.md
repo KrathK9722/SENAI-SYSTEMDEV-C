@@ -11,6 +11,7 @@ You can see and run my Class Tests [here](https://github.com/KrathK9722/SENAI-SY
 RELEASES:
 - Test #1 (Inventory Management)
 - Test #2 (Task Manager)
+- Need to create releasse of Array - Activitie #13
 
 You can still donwload and run every code on the archives if you want to test all of them, most of them are in portuguese but you can see it anyways.
 ---------------------------------------------------------------------------------------
