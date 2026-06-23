@@ -9,6 +9,9 @@
 void esperarEnter();
 void printMenu();
 void showRoom(int seat[NL][NC]);
+void reserveSeat(int seat[NL][NC]);
+void freeSeat(int seat[NL][NC]);
+void total(int seat[NL][NC]);
 
 int main(){
     SetConsoleOutputCP(65001);
@@ -27,21 +30,27 @@ int main(){
         {
         case 1:
             showRoom(seat);
+            reserveSeat(seat);
+            esperarEnter();
             break;
         case 2:
-            /* code */
+            showRoom(seat);
+            freeSeat(seat);
+            esperarEnter();
             break;
         case 3:
             showRoom(seat);
             esperarEnter();
             break;
         case 4:
-            /* code */
+            total(seat);
+            esperarEnter();
             break;
         case 0:
-            /* code */
             break;
         default:
+            printf("Invalid Option");
+            esperarEnter();
             break;
         }
     } while (option != 0);
@@ -61,11 +70,11 @@ void esperarEnter()
 //Visual Menu
 void printMenu(){
     printf("\n===========| CINEMA MENU |===========");
-    printf("\n1 - Reservar assento");
-    printf("\n2 - Liber assento");
-    printf("\n3 - Mostrar sala");
-    printf("\n4 - Total de lugares livres");
-    printf("\n0 - Sair");
+    printf("\n1 - Reserve seat");
+    printf("\n2 - Free one seat");
+    printf("\n3 - See the room");
+    printf("\n4 - Total of free seats");
+    printf("\n0 - Exit");
     printf("\nChoose an option:");
 }
 
@@ -85,17 +94,69 @@ void showRoom(int seat[NL][NC]){
     printf("\n|              SCREEN            |");
     printf("\n|                                |");
     printf("\n|Free = 0                        |");
-    printf("\n|Ocuppied = 0                    |");
+    printf("\n|Ocuppied = 1                    |");
     printf("\n|________________________________|");
 }
 
 //Reserve seat
-int line,column;
-int reserveSeat(int seat[NL][NC]){
+void reserveSeat(int seat[NL][NC]){
+    int seatLine;
+    int seatColumn;
     printf("\nSelect your seat");
     printf("\nLine(Number):");
-    scanf("%d",&line);
+    scanf("%d",&seatLine);
     printf("\nColumn:");
-    scanf("%d",&column);
-    seat[line][column] = 1;
+    scanf("%d",&seatColumn);
+    if (seatLine>=1 && seatLine <=6 && seatColumn>=1 && seatColumn <=8){
+        seatLine--;
+        seatColumn--;
+        if (seat[seatLine][seatColumn] == 0){
+            seat[seatLine][seatColumn] = 1;
+            printf("\nSeat selected!");
+        }
+        else{
+            printf("\nThis seat is already occupied!");
+        }
+    }
+    else{
+        printf("\nPlease select a valid position.");
+    }
+}
+
+//Free seat
+void freeSeat(int seat[NL][NC]){
+    int seatLine;
+    int seatColumn;
+    printf("\nSelect the seat you want to free up");
+    printf("\nLine(Number):");
+    scanf("%d",&seatLine);
+    printf("\nColumn:");
+    scanf("%d",&seatColumn);
+    if (seatLine>=1 && seatLine <=6 && seatColumn>=1 && seatColumn <=8){
+        seatLine--;
+        seatColumn--;
+        if (seat[seatLine][seatColumn] == 1){
+            seat[seatLine][seatColumn] = 0;
+            printf("\nThs seat is free now!");
+        }
+        else{
+            printf("\nThis seat is not taken!");
+        }
+    }
+    else{
+        printf("\nPlease select a valid position.");
+    }
+}
+
+//Total free seats
+void total(int seat[NL][NC]){
+    int total;
+    for(int i=0;i<NL;i++){
+        for(int j=0;j<NC;j++){
+            if (seat[i][j] ==  0){
+                total++;
+            }
+        }
+    }
+    printf("\nThe total amount of free seats is: %d",total);
 }
