@@ -82,26 +82,27 @@ void printMenu(){
 
 //Show seats
 void showReport(int seller[NL][NC]){
-    printf("\n____________________________________________________________________");
-    printf("\n|                                SALES REPORT                      |");
-    printf("\n|                                                                  |");
-    printf("\n|WEEKDAY     |   1   |   2   |   3   |   4   |   5  |   6  |   7   |");
-    printf("\n|____________|       |       |       |       |      |      |       |");
+    printf("\n______________________________________________________________________");
+    printf("\n|                                SALES REPORT                        |");
+    printf("\n|____________________________________________________________________|");
+    printf("\n|WEEKDAY     |   1   |   2   |   3   |   4   |   5   |   6   |   7   |");
+    printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
     for (int i=0;i<NL;i++){
-    printf("\n|Seller #%03d | ",i+1);
+    printf("\n|Seller #%03d |",i+1);
         for(int j=0;j<7;j++){
             printf(" R$%03d |",seller[i][j]);
         }
-        printf("|");
-        printf("\n|____________________________________________________________|");
+    printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
         
     }
-    printf("\n|Best sale: R$%03d                                            |",seller[0][0]);
-    printf("\n|Best seller: Seller#%03d                                     |",1);
-    printf("\n|____________________________________________________________|");
+    printf("\n|Best sale: R$%03d                                                    |",seller[0][0]);
+    printf("\n|Best seller: Seller#%03d                                             |",1);
+    printf("\n|____________________________________________________________________|");
 }
 
 //Reserve seat
+void registerSale(int seller[NL][NC]){
+}
 
 //Total Seller sales
 void totalSeller(int seller[NL][NC]){
@@ -115,3 +116,5 @@ void totalSeller(int seller[NL][NC]){
     }
     printf("\nThe total amount of released seats is: %d",total);
 }
+
+void totalDay(int seller[NL][NC]){}
