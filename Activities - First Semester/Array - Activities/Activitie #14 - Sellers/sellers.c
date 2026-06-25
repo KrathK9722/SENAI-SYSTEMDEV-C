@@ -15,7 +15,7 @@ void totalDay(int seller[NL][NC]);
 
 int main(){
     SetConsoleOutputCP(65001);
-    printf("How many sellers you have in your enterprise:");
+    printf("How many salespeople do you have in your company:");
     scanf("%d",&NL);
 
 
@@ -71,7 +71,7 @@ void esperarEnter()
 
 //Visual Menu
 void printMenu(){
-    printf("\n===========| SELLERS MENU |===========");
+    printf("\n===========| SALES MENU |===========");
     printf("\n1 - Register Sale");
     printf("\n2 - See report");
     printf("\n3 - Total sales per Seller");
@@ -102,24 +102,59 @@ void showReport(int seller[NL][NC]){
 
 //Reserve seat
 void registerSale(int seller[NL][NC]){
-    int saveId;
-    printf("\nWhich seller's sale do you want to register?");
+    char idWrited[100];
+    int saveId,saveDay,value;
+    printf("\nWhich seller's sale do you want to register? ");
     printf("\nWrite the seller's ID 1-%d:",NL);
-    scanf("%d",&saveId);
+    scanf("%s",&idWrited);
+    for (int i = 0; i < strlen(idWrited); i++) {
+        if (!isdigit(idWrited[i])) {
+            printf("\nError: write just integral numbers!\n");
+            return;
+        }
+    }
+    saveId = atoi(idWrited);
 
+    do{
+        printf("\nThis sale was made on which day of the weekend?");
+        printf("\n1-Sunday");
+        printf("\n2-Monday");
+        printf("\n3-Tuesday");
+        printf("\n4-Wednesday");
+        printf("\n5-Thursday");
+        printf("\n6-Friday");
+        printf("\n7-Saturday");
+        printf("\nChoose a number:");
+        scanf("%d",&saveDay);
+        if(saveDay <1 || saveDay >7){
+            printf("\nChoose a valid date!");
+        }
+    }while(saveDay <1 || saveDay >7);
+
+    do{
+        printf("\nWhat was the amount of the sale? ");
+        scanf("%d",&value);
+        if(value > 0){
+            seller[saveId-1][saveDay-1] = value;
+            printf("\nSale saved!");
+        }
+        else{
+            printf("\nWrite a valid value!");
+        }
+    }while(value<=0);
 }
 
 //Total Seller sales
 void totalSeller(int seller[NL][NC]){
-    int total;
+    int total = 0;
     for(int i=0;i<NL;i++){
         for(int j=0;j<NC;j++){
-            if (seller[i][j] ==  0){
-                total++;
-            }
+            total += seller[i][j];
         }
     }
     printf("\nThe total amount of released seats is: %d",total);
 }
 
-void totalDay(int seller[NL][NC]){}
+void totalDay(int seller[NL][NC]){
+    
+}
