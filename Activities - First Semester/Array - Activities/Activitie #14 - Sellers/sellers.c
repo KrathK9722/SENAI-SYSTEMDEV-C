@@ -88,22 +88,25 @@ void showReport(int seller[NL][NC]){
     printf("\n|WEEKDAY     |   1   |   2   |   3   |   4   |   5   |   6   |   7   |");
     printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
     for (int i=0;i<NL;i++){
-    printf("\n|Seller #%03d |",i+1);
+    printf("\n|Seller ID%03d|",i+1);
         for(int j=0;j<7;j++){
             printf(" R$%03d |",seller[i][j]);
         }
     printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
         
     }
-    printf("\n|Best sale: R$%03d                                                    |",seller[0][0]);
+    printf("\n|Best sale Day:%d Value:R$%03d                                         |",1,seller[0][0]);
     printf("\n|Best seller: Seller#%03d                                             |",1);
     printf("\n|____________________________________________________________________|");
 }
 
 //Reserve seat
 void registerSale(int seller[NL][NC]){
+    int saveId;
     printf("\nWhich seller's sale do you want to register?");
-    printf("\nWrite the number:");
+    printf("\nWrite the seller's ID 1-%d:",NL);
+    scanf("%d",&saveId);
+
 }
 
 //Total Seller sales
