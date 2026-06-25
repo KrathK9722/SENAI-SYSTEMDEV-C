@@ -102,6 +102,8 @@ void showReport(int seller[NL][NC]){
 
 //Reserve seat
 void registerSale(int seller[NL][NC]){
+    printf("\nWhich seller's sale do you want to register?");
+    printf("\nWrite the number:");
 }
 
 //Total Seller sales
