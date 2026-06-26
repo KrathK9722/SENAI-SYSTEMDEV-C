@@ -8,10 +8,10 @@ int NL;
 //Prototypes
 void esperarEnter();
 void printMenu();
-void showReport(int seller[NL][NC]);
-void registerSale(int seller[NL][NC]);
-void totalSeller(int seller[NL][NC]);
-void totalDay(int seller[NL][NC]);
+void showReport(int salesperson[NL][NC]);
+void registerSale(int salesperson[NL][NC]);
+void totalSalesperson(int salesperson[NL][NC]);
+void totalDay(int salesperson[NL][NC]);
 
 int main(){
     SetConsoleOutputCP(65001);
@@ -19,10 +19,10 @@ int main(){
     scanf("%d",&NL);
 
 
-    int seller[NL][NC], option = 10;
+    int salesperson[NL][NC], option = 10;
     for(int i=0;i<NL;i++){
         for(int j=0;j<NC;j++){
-            seller[i][j]=0;
+            salesperson[i][j]=0;
         }
     }
 
@@ -33,19 +33,19 @@ int main(){
         switch (option)
         {
         case 1:
-            registerSale(seller);
+            registerSale(salesperson);
             esperarEnter();
             break;
         case 2:
-            showReport(seller);
+            showReport(salesperson);
             esperarEnter();
             break;
         case 3:
-            totalSeller(seller);
+            totalSalesperson(salesperson);
             esperarEnter();
             break;
         case 4:
-            totalDay(seller);
+            totalDay(salesperson);
             esperarEnter();
             break;
         case 0:
@@ -74,40 +74,56 @@ void printMenu(){
     printf("\n===========| SALES MENU |===========");
     printf("\n1 - Register Sale");
     printf("\n2 - See report");
-    printf("\n3 - Total sales per Seller");
+    printf("\n3 - Total sales per Salesperson");
     printf("\n4 - Total sales per Day");
     printf("\n0 - Exit");
     printf("\nChoose an option:");
 }
 
 //Show seats
-void showReport(int seller[NL][NC]){
+void showReport(int salesperson[NL][NC]){
+    int bestSalesperson=0,bestSale=0, bestDay, salespersonLastTotal=0;
+    for(int i=0;i<NL;i++){
+        int salespersonTotal = 0;
+        for(int j=0;j<NC;j++){
+            if(salesperson[i][j]>bestSale){
+                bestSale = salesperson[i][j];
+                bestDay = j;
+            }
+            salespersonTotal += salesperson[i][j];
+        }
+        if(salespersonLastTotal > salespersonTotal){
+            salespersonLastTotal = salespersonTotal;
+            bestSalesperson = i;
+        }
+    }
+
     printf("\n______________________________________________________________________");
     printf("\n|                                SALES REPORT                        |");
     printf("\n|____________________________________________________________________|");
     printf("\n|WEEKDAY     |   1   |   2   |   3   |   4   |   5   |   6   |   7   |");
     printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
     for (int i=0;i<NL;i++){
-    printf("\n|Seller ID%03d|",i+1);
+    printf("\n|Person ID%03d|",i+1);
         for(int j=0;j<7;j++){
-            printf(" R$%03d |",seller[i][j]);
+            printf(" R$%03d |",salesperson[i][j]);
         }
     printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
         
     }
-    printf("\n|Best sale Day:%d Value:R$%03d                                         |",1,seller[0][0]);
-    printf("\n|Best seller: Seller#%03d                                             |",1);
+    printf("\n|Best sale Day:%d Value:R$%03d                                         |",bestDay,bestSalesperson);
+    printf("\n|Best salesperson: Salesperson ID%03d                                  |",bestSalesperson);
     printf("\n|____________________________________________________________________|");
 }
 
 //Reserve seat
-void registerSale(int seller[NL][NC]){
+void registerSale(int salesperson[NL][NC]){
     char idWrited[100];
     int saveId,saveDay,value;
-    printf("\nWhich seller's sale do you want to register? ");
-    printf("\nWrite the seller's ID 1-%d:",NL);
-    scanf("%s",&idWrited);
-    for (int i = 0; i < strlen(idWrited); i++) {
+    printf("\nWhich salesperson's sale do you want to register? ");
+    printf("\nWrite the salesperson's ID 1-%d:",NL);
+    scanf("%s",idWrited);
+    for (long long unsigned int i = 0; i < strlen(idWrited); i++) {
         if (!isdigit(idWrited[i])) {
             printf("\nError: write just integral numbers!\n");
             return;
@@ -135,7 +151,7 @@ void registerSale(int seller[NL][NC]){
         printf("\nWhat was the amount of the sale? ");
         scanf("%d",&value);
         if(value > 0){
-            seller[saveId-1][saveDay-1] = value;
+            salesperson[saveId-1][saveDay-1] = value;
             printf("\nSale saved!");
         }
         else{
@@ -144,17 +160,45 @@ void registerSale(int seller[NL][NC]){
     }while(value<=0);
 }
 
-//Total Seller sales
-void totalSeller(int seller[NL][NC]){
-    int total = 0;
+//Total Salesperson sales
+void totalSeller(int salesperson[NL][NC]){
+    int totalSale[NL];
     for(int i=0;i<NL;i++){
         for(int j=0;j<NC;j++){
-            total += seller[i][j];
+            if(j == 0){
+                totalSale[i] = 0;
+            }
+            else{
+                totalSale[i] += salesperson[i][j];
+            }
         }
     }
-    printf("\nThe total amount of released seats is: %d",total);
+    printf("\n========= TOTAL REVENUE PER SALESPERSON ========");
+    for(int i=0;i<NL;i++){
+        printf("\nSalesperson ID%03d| TOTAL VALUE:R$%01d",i,totalSale[i]);
+    }
+    printf("\n====================================================");
 }
 
-void totalDay(int seller[NL][NC]){
-    
+void totalDay(int salesperson[NL][NC]){
+    int totalSale[7];
+    for(int j=0;j<NC;j++){
+        for(int i=0;i<NL;i++){
+            if(i == 0){
+                totalSale[j] = 0;
+            }
+            else{
+                totalSale[j] += salesperson[i][j];
+            }
+        }
+    }
+    printf("\n======== TOTAL VALUE ON EACH DAY ========");
+    printf("\nSunday: R$%01d",totalSale[0]);
+    printf("\nMonday: R$%01d",totalSale[1]);
+    printf("\nTuesday: R$%01d",totalSale[2]);
+    printf("\nWednesday: R$%01d",totalSale[3]);
+    printf("\nThursday: R$%01d",totalSale[4]);
+    printf("\nFriday: R$%01d",totalSale[5]);
+    printf("\nSaturday: R$%01d",totalSale[6]);
+    printf("\n=========================================");
 }
