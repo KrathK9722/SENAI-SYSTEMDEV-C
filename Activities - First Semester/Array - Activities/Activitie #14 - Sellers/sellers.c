@@ -82,7 +82,7 @@ void printMenu(){
 
 //Show seats
 void showReport(int salesperson[NL][NC]){
-    int bestSalesperson=0,bestSale=0, bestDay, salespersonLastTotal=0;
+    int bestSalesperson=0,bestSale=-1, bestDay=0, salespersonLastTotal=0;
     for(int i=0;i<NL;i++){
         int salespersonTotal = 0;
         for(int j=0;j<NC;j++){
@@ -92,7 +92,7 @@ void showReport(int salesperson[NL][NC]){
             }
             salespersonTotal += salesperson[i][j];
         }
-        if(salespersonLastTotal > salespersonTotal){
+        if(salespersonTotal > salespersonLastTotal){
             salespersonLastTotal = salespersonTotal;
             bestSalesperson = i;
         }
@@ -111,8 +111,8 @@ void showReport(int salesperson[NL][NC]){
     printf("\n|____________|_______|_______|_______|_______|_______|_______|_______|");
         
     }
-    printf("\n|Best sale Day:%d Value:R$%03d                                         |",bestDay,bestSalesperson);
-    printf("\n|Best salesperson: Salesperson ID%03d                                  |",bestSalesperson);
+    printf("\n|Best sale: R$%03d Made on day: %01d                                     |",bestSale,bestDay+1);
+    printf("\n|Best salesperson: Salesperson ID%03d                                 |",bestSalesperson+1);
     printf("\n|____________________________________________________________________|");
 }
 
@@ -161,7 +161,7 @@ void registerSale(int salesperson[NL][NC]){
 }
 
 //Total Salesperson sales
-void totalSeller(int salesperson[NL][NC]){
+void totalSalesperson(int salesperson[NL][NC]){
     int totalSale[NL];
     for(int i=0;i<NL;i++){
         for(int j=0;j<NC;j++){
@@ -175,7 +175,7 @@ void totalSeller(int salesperson[NL][NC]){
     }
     printf("\n========= TOTAL REVENUE PER SALESPERSON ========");
     for(int i=0;i<NL;i++){
-        printf("\nSalesperson ID%03d| TOTAL VALUE:R$%01d",i,totalSale[i]);
+        printf("\nSalesperson ID%03d| TOTAL VALUE:R$%01d",i+1,totalSale[i]);
     }
     printf("\n====================================================");
 }
